@@ -1,26 +1,85 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { loginUser } from './actions';
+import jwt_decode from 'jwt-decode';
+import setAuthToken from './utils/setAuthToken';
+import history from './history';
+import { connect } from 'react-redux';
+import Home from './components/Home';
+import Discover from './components/Discover';
+import Profile from './components/Profile';
+import Library from './components/Library';
+import About from './components/About';
+import Search from './components/Search';
+import Toolbar from './components/Toolbar';
+import Landing from './components/Landing';
+import isEmpty from 'is-empty';
+import SpotifyWebApi from 'spotify-web-api-js';
+const spotifyApi = new SpotifyWebApi();
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+// const spotifyWebApi = new Spotify();
 
-export default App;
+const App = (props) => {
+	let token = '';
+	useEffect(async () => {
+		const params = getHashParams();
+
+		console.log('useEffect');
+		if (isEmpty(params)) {
+			console.log('empty');
+			if (localStorage.jwtToken) {
+				token = localStorage.jwtToken;
+				console.log('token found' + localStorage.jwtToken);
+			} else {
+				console.log('token not found');
+			}
+		} else {
+			console.log('not empty');
+			// returned from server
+			token = params.token;
+			localStorage.setItem('jwtToken', token);
+		}
+		if (token !== '') {
+			spotifyApi.setAccessToken(token);
+			await setMe();
+		}
+	}, props.auth.isAuthenticated);
+
+	const getHashParams = () => {
+		let hashParams = {};
+		let e,
+			r = /([^&;=]+)=?([^&;]*)/g,
+			q = window.location.hash.substring(1);
+		while ((e = r.exec(q))) {
+			hashParams[e[1]] = decodeURIComponent(e[2]);
+		}
+		return hashParams;
+	};
+
+	const setMe = () => {
+		spotifyApi.getMe().then((response) => {
+			props.loginUser(response.id);
+		});
+	};
+
+	if (props.auth.isAuthenticated) {
+		return (
+			<BrowserRouter history={history}>
+				<Route path="/profile" component={Profile} />
+				<Route path="/library" component={Library} />
+				<Route path="/about" component={About} />
+				<Route path="/search" component={Search} />
+				<Route path="/discover" component={Discover} />
+				<Route exact path="/" component={Home} />
+				<Toolbar />
+			</BrowserRouter>
+		);
+	} else {
+		return <Landing />;
+	}
+};
+const mapStateToProps = (state) => ({
+	auth: state.auth,
+	errors: state.errors
+});
+export default connect(mapStateToProps, { loginUser })(App);
