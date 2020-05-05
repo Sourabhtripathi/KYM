@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { loginUser } from './actions';
-import jwt_decode from 'jwt-decode';
-import setAuthToken from './utils/setAuthToken';
+import { loginUser, setUserNotLoading } from './actions';
 import history from './history';
 import { connect } from 'react-redux';
 import Home from './components/Home';
@@ -21,7 +19,7 @@ const spotifyApi = new SpotifyWebApi();
 
 const App = (props) => {
 	let token = '';
-	useEffect(async () => {
+	useEffect(() => {
 		const params = getHashParams();
 
 		console.log('useEffect');
@@ -32,6 +30,7 @@ const App = (props) => {
 				console.log('token found' + localStorage.jwtToken);
 			} else {
 				console.log('token not found');
+				props.setUserNotLoading();
 			}
 		} else {
 			console.log('not empty');
@@ -39,9 +38,10 @@ const App = (props) => {
 			token = params.token;
 			localStorage.setItem('jwtToken', token);
 		}
+
 		if (token !== '') {
 			spotifyApi.setAccessToken(token);
-			await setMe();
+			setMe();
 		}
 	}, props.auth.isAuthenticated);
 
@@ -59,6 +59,7 @@ const App = (props) => {
 	const setMe = () => {
 		spotifyApi.getMe().then((response) => {
 			props.loginUser(response.id);
+			props.setUserNotLoading();
 		});
 	};
 
@@ -75,11 +76,12 @@ const App = (props) => {
 			</BrowserRouter>
 		);
 	} else {
-		return <Landing />;
+		if (props.auth.loading) return <div>Loading</div>;
+		else return <Landing />;
 	}
 };
 const mapStateToProps = (state) => ({
 	auth: state.auth,
 	errors: state.errors
 });
-export default connect(mapStateToProps, { loginUser })(App);
+export default connect(mapStateToProps, { loginUser, setUserNotLoading })(App);

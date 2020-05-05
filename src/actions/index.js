@@ -1,7 +1,7 @@
 import axios from 'axios';
 import setAuthToken from '../utils/setAuthToken';
 import jwt_decode from 'jwt-decode';
-import { GET_ERRORS, SET_CURRENT_USER, USER_LOADING } from './types';
+import { GET_ERRORS, SET_CURRENT_USER, USER_NOT_LOADING } from './types';
 
 // Login - get user token
 export const loginUser = (id) => (dispatch) => {
@@ -10,11 +10,12 @@ export const loginUser = (id) => (dispatch) => {
 	dispatch({ type: SET_CURRENT_USER, payload: id });
 };
 
-// User loading
-export const setUserLoading = () => {
-	return {
-		type: USER_LOADING
-	};
+// User not loading
+export const setUserNotLoading = () => (dispatch) => {
+	dispatch({
+		type: USER_NOT_LOADING,
+		payload: null
+	});
 };
 
 // Log user out
