@@ -1,13 +1,11 @@
 import axios from 'axios';
 import setAuthToken from '../utils/setAuthToken';
 import jwt_decode from 'jwt-decode';
-import { GET_ERRORS, SET_CURRENT_USER, USER_NOT_LOADING } from './types';
+import { GET_ERRORS, SET_CURRENT_USER, USER_NOT_LOADING, SET_TOP_TRACKS } from './types';
 
-// Login - get user token
-export const loginUser = (id) => (dispatch) => {
-	// Decode token to get user data
-	// Set current user
-	dispatch({ type: SET_CURRENT_USER, payload: id });
+// set Users top tracks
+export const setMyTopTracks = (data) => (dispatch) => {
+	dispatch({ type: SET_TOP_TRACKS, payload: data });
 };
 
 // User not loading
@@ -18,11 +16,13 @@ export const setUserNotLoading = () => (dispatch) => {
 	});
 };
 
+// Login
+export const loginUser = (id) => (dispatch) => {
+	dispatch({ type: SET_CURRENT_USER, payload: id });
+};
+
 // Log user out
 export const logoutUser = () => (dispatch) => {
-	// Remove token from local storage
 	localStorage.removeItem('jwtToken');
-	// Remove auth header for future requests
-	// Set current user to empty object {} which will set isAuthenticated to false
 	dispatch({ type: SET_CURRENT_USER, payload: null });
 };

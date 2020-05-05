@@ -20,13 +20,20 @@ const spotifyApi = new SpotifyWebApi();
 const App = (props) => {
 	let token = '';
 	useEffect(() => {
-		const params = getHashParams();
-
+		const params = getParams();
+		console.log(params);
 		console.log('useEffect');
 		if (isEmpty(params)) {
 			console.log('empty');
 			if (localStorage.jwtToken) {
-				token = localStorage.jwtToken;
+				// check if token is valid and also check if user stills exists in db
+
+				// if (valid && userExists) {
+				// 	token = localStorage.jwtToken;
+				// } else {
+				// 	localStorage.removeItem('jwtToken');
+				// 	props.setUserNotLoading();
+				// }
 				console.log('token found' + localStorage.jwtToken);
 			} else {
 				console.log('token not found');
@@ -45,15 +52,21 @@ const App = (props) => {
 		}
 	}, props.auth.isAuthenticated);
 
-	const getHashParams = () => {
-		let hashParams = {};
-		let e,
-			r = /([^&;=]+)=?([^&;]*)/g,
-			q = window.location.hash.substring(1);
-		while ((e = r.exec(q))) {
-			hashParams[e[1]] = decodeURIComponent(e[2]);
+	const getParams = () => {
+		const str = window.location.hash.substring(1);
+		let pieces = str.split('&'),
+			data = {},
+			i,
+			parts;
+		// process each query pair
+		for (i = 0; i < pieces.length; i++) {
+			parts = pieces[i].split('=');
+			if (parts.length < 2) {
+				parts.push('');
+			}
+			data[decodeURIComponent(parts[0])] = decodeURIComponent(parts[1]);
 		}
-		return hashParams;
+		return JSON.parse(Object.keys(data)[0]);
 	};
 
 	const setMe = () => {

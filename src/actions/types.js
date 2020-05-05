@@ -1,3 +1,4 @@
 export const GET_ERRORS = 'GET_ERRORS';
 export const USER_NOT_LOADING = 'USER_NOT_LOADING';
 export const SET_CURRENT_USER = 'SET_CURRENT_USER';
+export const SET_TOP_TRACKS = 'SET_TOP_TRACKS';
