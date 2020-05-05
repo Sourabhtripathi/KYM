@@ -18,32 +18,41 @@ const spotifyApi = new SpotifyWebApi();
 // const spotifyWebApi = new Spotify();
 
 const App = (props) => {
-	let token = '';
+	// const [ timeLeft, setTimeLeft ] = useState(calculateTimeLeft());
+
 	useEffect(() => {
+		// setTimeout(() => {
+		// 	setTimeLeft(calculateTimeLeft());
+		// }, 1000);
 		const params = getParams();
 		console.log(params);
 		console.log('useEffect');
+		let token = '';
 		if (isEmpty(params)) {
 			console.log('empty');
-			if (localStorage.jwtToken) {
+			if (localStorage.accessToken) {
+				console.log('token found' + localStorage.accessToken);
 				// check if token is valid and also check if user stills exists in db
-
-				// if (valid && userExists) {
-				// 	token = localStorage.jwtToken;
-				// } else {
-				// 	localStorage.removeItem('jwtToken');
-				// 	props.setUserNotLoading();
-				// }
-				console.log('token found' + localStorage.jwtToken);
+				if (isValid()) {
+					token = localStorage.accessToken;
+				} else {
+					// refresh the token
+					console.log('session expired');
+					props.setUserNotLoading();
+				}
 			} else {
 				console.log('token not found');
 				props.setUserNotLoading();
 			}
 		} else {
-			console.log('not empty');
 			// returned from server
-			token = params.token;
-			localStorage.setItem('jwtToken', token);
+			console.log('not empty');
+			var d = new Date();
+			d.setSeconds(d.getSeconds() + params.expires_in);
+			token = params.accessToken;
+			localStorage.setItem('accessToken', params.accessToken);
+			localStorage.setItem('refreshToken', params.refreshToken);
+			localStorage.setItem('token_expire_time', d.getTime());
 		}
 
 		if (token !== '') {
@@ -53,6 +62,9 @@ const App = (props) => {
 	}, props.auth.isAuthenticated);
 
 	const getParams = () => {
+		if (isEmpty(window.location.hash)) {
+			return {};
+		}
 		const str = window.location.hash.substring(1);
 		let pieces = str.split('&'),
 			data = {},
@@ -98,3 +110,20 @@ const mapStateToProps = (state) => ({
 	errors: state.errors
 });
 export default connect(mapStateToProps, { loginUser, setUserNotLoading })(App);
+
+const isValid = () => {
+	const d = new Date();
+	if (d.getTime() <= parseInt(localStorage.token_expire_time)) return true;
+	return false;
+};
+
+// const calculateTimeLeft = () => {
+// 	let timeLeft = 10;
+// 	if (localStorage.accessToken) {
+// 		const difference = localStorage.token_expire_time - +new Date().getTime();
+// 		if (difference > 0) {
+// 			timeLeft = difference;
+// 		}
+// 	}
+// 	return timeLeft;
+// };

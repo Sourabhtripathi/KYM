@@ -23,6 +23,8 @@ export const loginUser = (id) => (dispatch) => {
 
 // Log user out
 export const logoutUser = () => (dispatch) => {
-	localStorage.removeItem('jwtToken');
+	localStorage.removeItem('accessToken');
+	localStorage.removeItem('refreshToken');
+	localStorage.removeItem('expire');
 	dispatch({ type: SET_CURRENT_USER, payload: null });
 };
