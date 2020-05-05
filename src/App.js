@@ -18,48 +18,64 @@ const spotifyApi = new SpotifyWebApi();
 // const spotifyWebApi = new Spotify();
 
 const App = (props) => {
-	// const [ timeLeft, setTimeLeft ] = useState(calculateTimeLeft());
+	const [ timeLeft, setTimeLeft ] = useState(calculateTimeLeft());
 
-	useEffect(() => {
-		// setTimeout(() => {
-		// 	setTimeLeft(calculateTimeLeft());
-		// }, 1000);
-		const params = getParams();
-		console.log(params);
-		console.log('useEffect');
-		let token = '';
-		if (isEmpty(params)) {
-			console.log('empty');
-			if (localStorage.accessToken) {
-				console.log('token found' + localStorage.accessToken);
-				// check if token is valid and also check if user stills exists in db
-				if (isValid()) {
-					token = localStorage.accessToken;
+	useEffect(
+		() => {
+			const params = getParams();
+			console.log('useEffect');
+			let token = '';
+			if (isEmpty(params)) {
+				console.log('empty');
+				if (localStorage.accessToken) {
+					console.log('token found' + localStorage.accessToken);
+					// check if token is valid and also check if user stills exists in db
+					if (isValid()) {
+						token = localStorage.accessToken;
+						setTimeout(() => {
+							setTimeLeft(calculateTimeLeft());
+							console.log('checked' + timeLeft);
+						}, 1000);
+					} else {
+						// refresh the token
+						console.log('session expired');
+						window.open(`http://localhost:3005/refresh_token?refresh_token=${localStorage.refreshToken}`);
+
+						setTimeout(() => {
+							setTimeLeft(calculateTimeLeft());
+						}, 1000);
+					}
 				} else {
-					// refresh the token
-					console.log('session expired');
+					console.log('token not found');
 					props.setUserNotLoading();
 				}
 			} else {
-				console.log('token not found');
-				props.setUserNotLoading();
-			}
-		} else {
-			// returned from server
-			console.log('not empty');
-			var d = new Date();
-			d.setSeconds(d.getSeconds() + params.expires_in);
-			token = params.accessToken;
-			localStorage.setItem('accessToken', params.accessToken);
-			localStorage.setItem('refreshToken', params.refreshToken);
-			localStorage.setItem('token_expire_time', d.getTime());
-		}
+				// returned from server
+				console.log('not empty');
+				var d = new Date();
+				// d.setSeconds(d.getSeconds() + 10);
+				d.setSeconds(d.getSeconds() + params.expires_in);
+				if (!params.refreshToken) {
+					// refreshed token-- just change access token and time
+					localStorage.setItem('accessToken', params.accessToken);
+					localStorage.setItem('token_expire_time', d.getTime());
+					window.close();
+				} else {
+					localStorage.setItem('accessToken', params.accessToken);
+					localStorage.setItem('refreshToken', params.refreshToken);
+					localStorage.setItem('token_expire_time', d.getTime());
+				}
 
-		if (token !== '') {
-			spotifyApi.setAccessToken(token);
-			setMe();
-		}
-	}, props.auth.isAuthenticated);
+				token = params.accessToken;
+			}
+
+			if (token !== '') {
+				spotifyApi.setAccessToken(token);
+				setMe();
+			}
+		},
+		[ props.auth.isAuthenticated, timeLeft ]
+	);
 
 	const getParams = () => {
 		if (isEmpty(window.location.hash)) {
@@ -89,6 +105,7 @@ const App = (props) => {
 	};
 
 	if (props.auth.isAuthenticated) {
+		console.log(timeLeft);
 		return (
 			<BrowserRouter history={history}>
 				<Route path="/profile" component={Profile} />
@@ -117,13 +134,13 @@ const isValid = () => {
 	return false;
 };
 
-// const calculateTimeLeft = () => {
-// 	let timeLeft = 10;
-// 	if (localStorage.accessToken) {
-// 		const difference = localStorage.token_expire_time - +new Date().getTime();
-// 		if (difference > 0) {
-// 			timeLeft = difference;
-// 		}
-// 	}
-// 	return timeLeft;
-// };
+const calculateTimeLeft = () => {
+	let timeLeft = 10;
+	if (localStorage.accessToken) {
+		const difference = localStorage.token_expire_time - new Date().getTime();
+		if (difference > 0) {
+			timeLeft = difference;
+		}
+	}
+	return timeLeft;
+};

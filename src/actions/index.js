@@ -25,6 +25,6 @@ export const loginUser = (id) => (dispatch) => {
 export const logoutUser = () => (dispatch) => {
 	localStorage.removeItem('accessToken');
 	localStorage.removeItem('refreshToken');
-	localStorage.removeItem('expire');
+	localStorage.removeItem('token_expire_time');
 	dispatch({ type: SET_CURRENT_USER, payload: null });
 };
