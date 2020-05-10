@@ -3,9 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 const Toolbar = () => {
-	const [ type, setType ] = useState('playlists');
-
-	useEffect(() => {}, [ type ]);
+	useEffect(() => {}, []);
 	return (
 		<div style={{ position: 'fixed', bottom: 10, margin: '0 auto' }}>
 			<span style={{ margin: '10px' }}>

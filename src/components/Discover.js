@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { setMyTopTracks } from '../actions';
 import { connect } from 'react-redux';
-import SpotifyWebApi from 'spotify-web-api-js';
-const spotifyApi = new SpotifyWebApi();
+// import SpotifyWebApi from 'spotify-web-api-js';
+// const spotifyApi = new SpotifyWebApi();
 
 const Discover = (props) => {
 	const [ type, setType ] = useState('playlists');
@@ -10,22 +9,31 @@ const Discover = (props) => {
 	useEffect(
 		() => {
 			// fetch playlists from top_playlists databse
-			const obj = {
-				limit: 10
-			};
-			spotifyApi.getMyTopTracks(obj).then((response) => {
-				props.setMyTopTracks(response.items);
-			});
+			if (type === 'playlists') {
+			}
 		},
 		[ type ]
 	);
+
+	const onTabSwitch = (val) => {
+		setType(val);
+	};
 	return (
 		<div>
 			<h1>Discover</h1>
+			<div>
+				<button disabled={type === 'playlists' ? true : false} onClick={() => onTabSwitch('playlists')}>
+					Playlists
+				</button>
+				<button disabled={type === 'users' ? true : false} onClick={() => onTabSwitch('users')}>
+					Similar Users
+				</button>
+			</div>
 			<ul>
-				{props.user.myTopTracks.map((track, index) => {
+				<h3>Top {type.charAt(0).toUpperCase() + type.slice(1)}</h3>
+				{/* {props.user.myTopTracks.map((track, index) => {
 					return <li key={index}>{track.name}</li>;
-				})}
+				})} */}
 			</ul>
 		</div>
 	);
@@ -33,7 +41,8 @@ const Discover = (props) => {
 
 const mapStateToProps = (state) => {
 	return {
-		user: state.user
+		user: state.user,
+		auth: state.auth
 	};
 };
-export default connect(mapStateToProps, { setMyTopTracks })(Discover);
+export default connect(mapStateToProps)(Discover);

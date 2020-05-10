@@ -1,6 +1,7 @@
-import { SET_TOP_TRACKS } from '../actions/types';
+import { SET_TOP_TRACKS, SET_MY_PLAYLISTS } from '../actions/types';
 const initialState = {
-	myTopTracks: []
+	myTopTracks: [],
+	myPlaylists: []
 };
 export default function(state = initialState, action) {
 	switch (action.type) {
@@ -9,7 +10,11 @@ export default function(state = initialState, action) {
 				...state,
 				myTopTracks: action.payload
 			};
-
+		case SET_MY_PLAYLISTS:
+			return {
+				...state,
+				myPlaylists: action.payload
+			};
 		default:
 			return state;
 	}

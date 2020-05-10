@@ -1,11 +1,13 @@
-import axios from 'axios';
-import setAuthToken from '../utils/setAuthToken';
-import jwt_decode from 'jwt-decode';
-import { GET_ERRORS, SET_CURRENT_USER, USER_NOT_LOADING, SET_TOP_TRACKS } from './types';
+import { SET_CURRENT_USER, USER_NOT_LOADING, SET_TOP_TRACKS, SET_MY_PLAYLISTS } from './types';
 
 // set Users top tracks
 export const setMyTopTracks = (data) => (dispatch) => {
 	dispatch({ type: SET_TOP_TRACKS, payload: data });
+};
+
+// set Users playlists
+export const setMyPlaylists = (data) => (dispatch) => {
+	dispatch({ type: SET_MY_PLAYLISTS, payload: data });
 };
 
 // User not loading

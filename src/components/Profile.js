@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { logoutUser } from '../actions';
+import { logoutUser, setMyTopTracks } from '../actions';
 import { connect } from 'react-redux';
 import SpotifyWebApi from 'spotify-web-api-js';
 const spotifyApi = new SpotifyWebApi();
 
 const Profile = (props) => {
-	const [ type, setType ] = useState('playlists');
-
-	useEffect(() => {}, [ type ]);
+	useEffect(() => {}, []);
 
 	const onLogoutClick = () => {
 		props.logoutUser();
+		props.setMyTopTracks([]);
 		props.history.push('/');
 	};
 	return (
@@ -20,4 +19,4 @@ const Profile = (props) => {
 		</div>
 	);
 };
-export default connect(null, { logoutUser })(Profile);
+export default connect(null, { logoutUser, setMyTopTracks })(Profile);
