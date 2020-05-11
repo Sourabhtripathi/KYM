@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { loginUser, setUserNotLoading, setMyTopTracks, setMyPlaylists } from './actions';
+import { loginUser, setUserNotLoading, setMyTopTracks, setMyPlaylists, setOpenPlaylists } from './actions';
 import history from './history';
 import { connect } from 'react-redux';
 import Header from './layouts/Header';
@@ -45,6 +45,7 @@ const App = (props) => {
 							}
 						});
 						props.setMyPlaylists(data);
+						props.setOpenPlaylists(res.data);
 					});
 				});
 			}
@@ -115,4 +116,10 @@ const mapStateToProps = (state) => ({
 	user: state.user,
 	errors: state.errors
 });
-export default connect(mapStateToProps, { loginUser, setUserNotLoading, setMyTopTracks, setMyPlaylists })(App);
+export default connect(mapStateToProps, {
+	loginUser,
+	setUserNotLoading,
+	setMyTopTracks,
+	setMyPlaylists,
+	setOpenPlaylists
+})(App);

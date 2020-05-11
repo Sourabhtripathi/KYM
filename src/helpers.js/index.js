@@ -95,6 +95,12 @@ export const addOpenPlaylist = async (body) => {
 	return response;
 };
 
+export const removeOpenPlaylist = async (pid) => {
+	const response = await server.delete(`/remove_open_playlist/${pid}`);
+	console.log(response);
+	return response;
+};
+
 export const getOpenPlaylists = async () => {
 	const response = await server.get('/open_playlists');
 	return response;

@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-// import SpotifyWebApi from 'spotify-web-api-js';
-// const spotifyApi = new SpotifyWebApi();
 
 const Discover = (props) => {
 	const [ type, setType ] = useState('playlists');
@@ -9,7 +7,7 @@ const Discover = (props) => {
 	useEffect(
 		() => {
 			// fetch playlists from top_playlists databse
-			if (type === 'playlists') {
+			if (type === 'users') {
 			}
 		},
 		[ type ]
@@ -17,6 +15,18 @@ const Discover = (props) => {
 
 	const onTabSwitch = (val) => {
 		setType(val);
+	};
+
+	const renderOpenPlaylists = () => {
+		return props.user.openPlaylists.map((playlist, index) => {
+			return <li key={index}>{playlist.playlistId}</li>;
+		});
+	};
+
+	const renderSimilarUsers = () => {
+		return props.user.similarUsers.map((user, index) => {
+			return <li key={index}>{user.name}</li>;
+		});
 	};
 	return (
 		<div>
@@ -29,12 +39,8 @@ const Discover = (props) => {
 					Similar Users
 				</button>
 			</div>
-			<ul>
-				<h3>Top {type.charAt(0).toUpperCase() + type.slice(1)}</h3>
-				{/* {props.user.myTopTracks.map((track, index) => {
-					return <li key={index}>{track.name}</li>;
-				})} */}
-			</ul>
+			<h3>Top {type.charAt(0).toUpperCase() + type.slice(1)}</h3>
+			<ul>{type === 'playlists' ? renderOpenPlaylists() : renderSimilarUsers()}</ul>
 		</div>
 	);
 };

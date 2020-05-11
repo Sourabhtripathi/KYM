@@ -1,4 +1,12 @@
-import { SET_CURRENT_USER, USER_NOT_LOADING, SET_TOP_TRACKS, SET_MY_PLAYLISTS, ADD_TO_OPEN_PLAYLISTS } from './types';
+import {
+	SET_CURRENT_USER,
+	USER_NOT_LOADING,
+	SET_TOP_TRACKS,
+	SET_MY_PLAYLISTS,
+	SET_OPEN_PLAYLISTS,
+	ADD_TO_OPEN_PLAYLISTS,
+	REMOVE_FROM_OPEN_PLAYLISTS
+} from './types';
 
 // set Users top tracks
 export const setMyTopTracks = (data) => (dispatch) => {
@@ -10,8 +18,19 @@ export const setMyPlaylists = (data) => (dispatch) => {
 	dispatch({ type: SET_MY_PLAYLISTS, payload: data });
 };
 
+// Set Open Playlists
+export const setOpenPlaylists = (data) => (dispatch) => {
+	dispatch({ type: SET_OPEN_PLAYLISTS, payload: data });
+};
+
+// Add to Open Playlists
 export const addToOpenPlaylists = (data) => (dispatch) => {
 	dispatch({ type: ADD_TO_OPEN_PLAYLISTS, payload: data });
+};
+
+// Remove from Open Playlists
+export const removeFromOpenPlaylists = (i) => (dispatch) => {
+	dispatch({ type: REMOVE_FROM_OPEN_PLAYLISTS, payload: i });
 };
 
 // User not loading
