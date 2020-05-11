@@ -3,6 +3,7 @@ import isEmpty from 'is-empty';
 import SpotifyWebApi from 'spotify-web-api-js';
 const spotifyApi = new SpotifyWebApi();
 
+// Auth Configuration
 export const setAccessToken = (token) => {
 	spotifyApi.setAccessToken(token);
 };
@@ -53,7 +54,8 @@ export const calculateTimeLeft = () => {
 export const updateTokens = (params) => {
 	let d = new Date();
 	// d.setSeconds(d.getSeconds() + 30);
-	d.setSeconds(d.getSeconds() + params.expires_in);
+	d.setSeconds(d.getSeconds() + 3600);
+	console.log(d.getTime());
 	if (!params.refreshToken) {
 		// refreshed token-- just change access token and time
 		localStorage.setItem('accessToken', params.accessToken);
@@ -66,16 +68,35 @@ export const updateTokens = (params) => {
 	}
 };
 
+// Fetch content from spotify api
+
 export const getMyTopTracks = (user) => {
 	const obj = {
 		limit: 10
 	};
 	return spotifyApi.getMyTopTracks(obj).then(async (response) => {
-		console.log(response);
-		const resp = await server.put(`/setTopTracks?spotifyId=${user}`, {
+		await server.put(`/setTopTracks?spotifyId=${user}`, {
 			topTracks: response.items
 		});
-		console.log(resp);
 		return response;
 	});
+};
+
+export const getUserPlaylists = (user) => {
+	return spotifyApi.getUserPlaylists(user).then((res) => {
+		return res.items;
+	});
+};
+
+// Api requests on own server
+export const checkOpenPlaylist = async (pid) => {
+	const response = await server.get('/open_playlists');
+	console.log(response);
+	return false;
+};
+
+export const addOpenPlaylist = async (body) => {
+	const response = await server.post('/add_open_playlist', body);
+	console.log(response);
+	return response;
 };

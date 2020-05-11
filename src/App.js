@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { loginUser, setUserNotLoading, setMyTopTracks } from './actions';
+import { loginUser, setUserNotLoading, setMyTopTracks, setMyPlaylists } from './actions';
 import history from './history';
 import { connect } from 'react-redux';
 import Header from './layouts/Header';
@@ -20,7 +20,8 @@ import {
 	isValid,
 	calculateTimeLeft,
 	updateTokens,
-	getMyTopTracks
+	getMyTopTracks,
+	getUserPlaylists
 } from './helpers.js';
 
 const App = (props) => {
@@ -29,8 +30,11 @@ const App = (props) => {
 	useEffect(
 		() => {
 			if (props.auth.isAuthenticated) {
-				getMyTopTracks().then((data) => {
+				getMyTopTracks(props.auth.user.id).then((data) => {
 					props.setMyTopTracks(data);
+				});
+				getUserPlaylists(props.user.id).then((data) => {
+					props.setMyPlaylists(data);
 				});
 			}
 		},
@@ -54,7 +58,6 @@ const App = (props) => {
 						window.open(`http://localhost:3005/refresh_token?refresh_token=${localStorage.refreshToken}`);
 						setTimeout(() => {
 							setTimeLeft(calculateTimeLeft());
-							console.log(timeLeft);
 						}, 1000);
 						token = localStorage.accessToken;
 					}
@@ -98,6 +101,7 @@ const App = (props) => {
 };
 const mapStateToProps = (state) => ({
 	auth: state.auth,
+	user: state.user,
 	errors: state.errors
 });
-export default connect(mapStateToProps, { loginUser, setUserNotLoading, setMyTopTracks })(App);
+export default connect(mapStateToProps, { loginUser, setUserNotLoading, setMyTopTracks, setMyPlaylists })(App);

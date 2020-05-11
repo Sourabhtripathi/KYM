@@ -1,18 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { setMyPlaylists } from '../actions';
-import SpotifyWebApi from 'spotify-web-api-js';
-const spotifyApi = new SpotifyWebApi();
+import { addOpenPlaylist, checkOpenPlaylist } from '../helpers.js';
 
 const Library = (props) => {
-	useEffect(
-		() => {
-			spotifyApi.getUserPlaylists(props.user.id).then((res) => {
-				props.setMyPlaylists(res.items);
-			});
-		},
-		[ props.myPlaylists ]
-	);
+	const onAddClick = async (pid, uid, i) => {
+		const body = {
+			userId: uid,
+			playlistId: pid,
+			rating: 0
+		};
+		const response = await addOpenPlaylist(body);
+	};
+
+	const onPlaylistRender = async (pid) => {
+		const response = await checkOpenPlaylist(pid);
+		console.log(response);
+	};
+
 	if (props.myPlaylists.length == 0) return <div>Loading</div>;
 	return (
 		<div>
@@ -22,7 +27,17 @@ const Library = (props) => {
 					return (
 						<li key={index}>
 							<span>{playlist.name} </span>
-							{/* <button style={{display : {playlist.}}}>Add to Open Playlists</button> */}
+
+							<button
+								onClick={() => {
+									onAddClick(playlist.id, playlist.owner.id, index);
+								}}
+								style={{
+									display: `${playlist.public ? 'in-line' : 'none'}`
+								}}
+							>
+								Add to Open Playlists
+							</button>
 						</li>
 					);
 				})}
