@@ -89,14 +89,28 @@ export const getUserPlaylists = (user) => {
 };
 
 // Api requests on own server
-export const checkOpenPlaylist = async (pid) => {
-	const response = await server.get('/open_playlists');
-	console.log(response);
-	return false;
-};
-
 export const addOpenPlaylist = async (body) => {
 	const response = await server.post('/add_open_playlist', body);
 	console.log(response);
 	return response;
+};
+
+export const getOpenPlaylists = async () => {
+	const response = await server.get('/open_playlists');
+	return response;
+};
+
+// Generel functions
+
+export const found = (array, value) => {
+	let retVal;
+	for (const i in array) {
+		if (array[i].playlistId === value) {
+			retVal = true;
+			break;
+		} else {
+			retVal = false;
+		}
+	}
+	return retVal;
 };

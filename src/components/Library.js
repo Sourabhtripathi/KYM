@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { setMyPlaylists } from '../actions';
-import { addOpenPlaylist, checkOpenPlaylist } from '../helpers.js';
+import { addOpenPlaylist } from '../helpers.js';
 
 const Library = (props) => {
 	const onAddClick = async (pid, uid, i) => {
@@ -11,11 +11,7 @@ const Library = (props) => {
 			rating: 0
 		};
 		const response = await addOpenPlaylist(body);
-	};
-
-	const onPlaylistRender = async (pid) => {
-		const response = await checkOpenPlaylist(pid);
-		console.log(response);
+		props.myPlaylists[i].open = true;
 	};
 
 	if (props.myPlaylists.length == 0) return <div>Loading</div>;
@@ -33,7 +29,7 @@ const Library = (props) => {
 									onAddClick(playlist.id, playlist.owner.id, index);
 								}}
 								style={{
-									display: `${playlist.public ? 'in-line' : 'none'}`
+									display: `${playlist.public && !playlist.open ? 'in-line' : 'none'}`
 								}}
 							>
 								Add to Open Playlists

@@ -21,7 +21,9 @@ import {
 	calculateTimeLeft,
 	updateTokens,
 	getMyTopTracks,
-	getUserPlaylists
+	getUserPlaylists,
+	getOpenPlaylists,
+	found
 } from './helpers.js';
 
 const App = (props) => {
@@ -34,7 +36,16 @@ const App = (props) => {
 					props.setMyTopTracks(data);
 				});
 				getUserPlaylists(props.user.id).then((data) => {
-					props.setMyPlaylists(data);
+					getOpenPlaylists().then((res) => {
+						data.map((playlist) => {
+							if (found(res.data, playlist.id)) {
+								playlist.open = true;
+							} else {
+								playlist.open = false;
+							}
+						});
+						props.setMyPlaylists(data);
+					});
 				});
 			}
 		},

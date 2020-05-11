@@ -1,4 +1,4 @@
-import { SET_TOP_TRACKS, SET_MY_PLAYLISTS } from '../actions/types';
+import { SET_TOP_TRACKS, SET_MY_PLAYLISTS, ADD_TO_OPEN_PLAYLISTS } from '../actions/types';
 const initialState = {
 	myTopTracks: [],
 	myPlaylists: []
@@ -11,6 +11,11 @@ export default function(state = initialState, action) {
 				myTopTracks: action.payload
 			};
 		case SET_MY_PLAYLISTS:
+			return {
+				...state,
+				myPlaylists: action.payload
+			};
+		case ADD_TO_OPEN_PLAYLISTS:
 			return {
 				...state,
 				myPlaylists: action.payload
