@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { logoutUser, setMyTopTracks } from '../actions';
 import { connect } from 'react-redux';
-import SpotifyWebApi from 'spotify-web-api-js';
-const spotifyApi = new SpotifyWebApi();
 
 const Profile = (props) => {
 	useEffect(() => {}, []);

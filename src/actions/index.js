@@ -5,7 +5,8 @@ import {
 	SET_MY_PLAYLISTS,
 	SET_OPEN_PLAYLISTS,
 	ADD_TO_OPEN_PLAYLISTS,
-	REMOVE_FROM_OPEN_PLAYLISTS
+	REMOVE_FROM_OPEN_PLAYLISTS,
+	TOGGLE_PLAYLIST
 } from './types';
 
 // set Users top tracks
@@ -16,6 +17,11 @@ export const setMyTopTracks = (data) => (dispatch) => {
 // set Users playlists
 export const setMyPlaylists = (data) => (dispatch) => {
 	dispatch({ type: SET_MY_PLAYLISTS, payload: data });
+};
+
+// toggle my playlist
+export const togglePlaylist = (data) => (dispatch) => {
+	dispatch({ type: TOGGLE_PLAYLIST, payload: data });
 };
 
 // Set Open Playlists

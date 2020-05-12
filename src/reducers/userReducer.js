@@ -3,7 +3,8 @@ import {
 	SET_MY_PLAYLISTS,
 	SET_OPEN_PLAYLISTS,
 	ADD_TO_OPEN_PLAYLISTS,
-	REMOVE_FROM_OPEN_PLAYLISTS
+	REMOVE_FROM_OPEN_PLAYLISTS,
+	TOGGLE_PLAYLIST
 } from '../actions/types';
 const initialState = {
 	myTopTracks: [],
@@ -23,6 +24,16 @@ export default function(state = initialState, action) {
 				...state,
 				myPlaylists: action.payload
 			};
+
+		case TOGGLE_PLAYLIST:
+			return {
+				...state,
+				myPlaylists: state.myPlaylists.map(
+					(playlist, index) =>
+						index === action.payload.index ? { ...playlist, open: action.payload.val } : playlist
+				)
+			};
+
 		case SET_OPEN_PLAYLISTS:
 			return {
 				...state,

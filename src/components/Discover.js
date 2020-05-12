@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 const Discover = (props) => {
 	const [ type, setType ] = useState('playlists');
+	const [ openPlaylists, setOpenPlaylists ] = useState([]);
 
 	useEffect(
 		() => {
 			// fetch playlists from top_playlists databse
-			if (type === 'users') {
+			if (type === 'playlists') {
 			}
 		},
 		[ type ]
@@ -19,13 +21,21 @@ const Discover = (props) => {
 
 	const renderOpenPlaylists = () => {
 		return props.user.openPlaylists.map((playlist, index) => {
-			return <li key={index}>{playlist.playlistId}</li>;
+			return (
+				<li key={index}>
+					<Link to={`/playlist/${playlist.playlistId}`}>{playlist.playlistName}</Link>
+				</li>
+			);
 		});
 	};
 
 	const renderSimilarUsers = () => {
 		return props.user.similarUsers.map((user, index) => {
-			return <li key={index}>{user.name}</li>;
+			return (
+				<li key={index}>
+					<Link to={`/`}>{user.name}</Link>
+				</li>
+			);
 		});
 	};
 	return (

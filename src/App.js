@@ -12,6 +12,7 @@ import About from './components/About';
 import Search from './components/Search';
 import Toolbar from './components/Toolbar';
 import Landing from './components/Landing';
+import Playlist from './components/Playlist';
 import isEmpty from 'is-empty';
 import {
 	setAccessToken,
@@ -97,6 +98,7 @@ const App = (props) => {
 		return (
 			<BrowserRouter history={history}>
 				<Header />
+				<Route path="/playlist/:pid" component={Playlist} />
 				<Route path="/profile" component={Profile} />
 				<Route path="/library" component={Library} />
 				<Route path="/about" component={About} />
