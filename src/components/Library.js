@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setMyPlaylists, addToOpenPlaylists, removeFromOpenPlaylists, togglePlaylist } from '../actions';
-import { addOpenPlaylist, removeOpenPlaylist } from '../helpers.js';
+import { addOpenPlaylist, removeOpenPlaylist } from '../helpers/index.js';
 
 const Library = (props) => {
 	const onAddClick = async (pid, pname, uid, i) => {
@@ -9,9 +10,12 @@ const Library = (props) => {
 			userId: uid,
 			playlistId: pid,
 			playlistName: pname,
-			rating: 0
+			overallRating: 0,
+			totalRating: 0,
+			ratedBy: []
 		};
 		const response = await addOpenPlaylist(body);
+		console.log(response);
 		const payload = {
 			index: i,
 			val: true
@@ -61,8 +65,6 @@ const Library = (props) => {
 		}
 	};
 
-	if (props.myPlaylists.length == 0) return <div>Loading</div>;
-
 	return (
 		<div>
 			<h1>My Playlists</h1>
@@ -70,7 +72,9 @@ const Library = (props) => {
 				{props.myPlaylists.map((playlist, index) => {
 					return (
 						<li key={index}>
-							<span>{playlist.name} </span>
+							<span>
+								<Link to={`/playlist/${playlist.id}`}>{playlist.name} </Link>
+							</span>
 							{renderButton(index)}
 						</li>
 					);

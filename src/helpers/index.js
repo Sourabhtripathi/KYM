@@ -88,6 +88,13 @@ export const getUserPlaylists = (user) => {
 	});
 };
 
+// Fetch playlist details
+export const getPlaylist = (pid) => {
+	return spotifyApi.getPlaylist(pid).then((res) => {
+		return res;
+	});
+};
+
 // Api requests on own server
 export const addOpenPlaylist = async (body) => {
 	const response = await server.post('/add_open_playlist', body);
@@ -97,7 +104,6 @@ export const addOpenPlaylist = async (body) => {
 
 export const removeOpenPlaylist = async (pid) => {
 	const response = await server.delete(`/remove_open_playlist/${pid}`);
-	console.log(response);
 	return response;
 };
 
@@ -106,7 +112,23 @@ export const getOpenPlaylists = async () => {
 	return response;
 };
 
-// Generel functions
+export const getOpenPlaylist = async (pid) => {
+	const response = await server.get(`/open_playlist/${pid}`);
+	return response;
+};
+
+export const addRating = async (pid, uid, rating) => {
+	console.log(pid);
+	console.log(uid);
+	console.log(rating);
+	const body = {
+		userId: uid,
+		rating: rating
+	};
+	const response = await server.put(`/open_playlist/rate/${pid}`, body);
+	return response;
+};
+// General functions
 
 export const found = (array, value) => {
 	let retVal;

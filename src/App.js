@@ -25,7 +25,7 @@ import {
 	getUserPlaylists,
 	getOpenPlaylists,
 	found
-} from './helpers.js';
+} from './helpers/index.js';
 
 const App = (props) => {
 	const [ timeLeft, setTimeLeft ] = useState(calculateTimeLeft());

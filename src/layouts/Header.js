@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 
 const Header = (props) => {
-	useEffect(() => {
-		console.log(props);
-	}, []);
+	useEffect(() => {}, []);
 	return (
 		<div>
 			<h4>Signed in as {props.user.display_name}</h4>

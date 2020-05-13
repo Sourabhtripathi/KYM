@@ -24,6 +24,7 @@ const Discover = (props) => {
 			return (
 				<li key={index}>
 					<Link to={`/playlist/${playlist.playlistId}`}>{playlist.playlistName}</Link>
+					<span> rating : {playlist.overallRating}</span>
 				</li>
 			);
 		});
