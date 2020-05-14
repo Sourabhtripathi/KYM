@@ -4,7 +4,9 @@ import {
 	SET_OPEN_PLAYLISTS,
 	ADD_TO_OPEN_PLAYLISTS,
 	REMOVE_FROM_OPEN_PLAYLISTS,
-	TOGGLE_PLAYLIST
+	TOGGLE_PLAYLIST,
+	ADD_TO_MY_PLAYLISTS,
+	REMOVE_FROM_MY_PLAYLISTS
 } from '../actions/types';
 const initialState = {
 	myTopTracks: [],
@@ -25,6 +27,19 @@ export default function(state = initialState, action) {
 				myPlaylists: action.payload
 			};
 
+		case ADD_TO_MY_PLAYLISTS:
+			return {
+				...state,
+				myPlaylists: [ ...state.myPlaylists, action.payload ]
+			};
+		case REMOVE_FROM_MY_PLAYLISTS:
+			return {
+				...state,
+				myPlaylists: [
+					...state.myPlaylists.slice(0, action.payload),
+					...state.myPlaylists.slice(action.payload + 1)
+				]
+			};
 		case TOGGLE_PLAYLIST:
 			return {
 				...state,

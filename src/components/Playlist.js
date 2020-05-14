@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+import { addToMyPlaylists, removeFromMyPlaylists } from '../actions';
 import isEmpty from 'is-empty';
 import {
 	getPlaylist,
@@ -82,11 +83,13 @@ const Playlist = (props) => {
 	};
 
 	const onFollowClick = () => {
-		console.log(playlist.id);
 		if (follow) {
 			unfollowPlaylist(playlist.id);
+			const index = props.myPlaylists.findIndex(({ id }) => id === playlist.id);
+			props.removeFromMyPlaylists(index);
 		} else {
 			followPlaylist(playlist.id);
+			props.addToMyPlaylists(playlist);
 		}
 	};
 
@@ -116,7 +119,8 @@ const Playlist = (props) => {
 
 const mapStateToProps = (state) => {
 	return {
-		auth: state.auth
+		auth: state.auth,
+		myPlaylists: state.user.myPlaylists
 	};
 };
-export default connect(mapStateToProps)(Playlist);
+export default connect(mapStateToProps, { addToMyPlaylists, removeFromMyPlaylists })(Playlist);

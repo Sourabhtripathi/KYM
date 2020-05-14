@@ -15,7 +15,6 @@ const Library = (props) => {
 			ratedBy: []
 		};
 		const response = await addOpenPlaylist(body);
-		console.log(response);
 		const payload = {
 			index: i,
 			val: true
@@ -35,7 +34,6 @@ const Library = (props) => {
 	};
 
 	const renderButton = (index) => {
-		console.log(props.myPlaylists[index]);
 		if (!props.myPlaylists[index].open && props.myPlaylists[index].public) {
 			return (
 				<button

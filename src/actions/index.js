@@ -6,7 +6,9 @@ import {
 	SET_OPEN_PLAYLISTS,
 	ADD_TO_OPEN_PLAYLISTS,
 	REMOVE_FROM_OPEN_PLAYLISTS,
-	TOGGLE_PLAYLIST
+	TOGGLE_PLAYLIST,
+	ADD_TO_MY_PLAYLISTS,
+	REMOVE_FROM_MY_PLAYLISTS
 } from './types';
 
 // set Users top tracks
@@ -14,9 +16,19 @@ export const setMyTopTracks = (data) => (dispatch) => {
 	dispatch({ type: SET_TOP_TRACKS, payload: data });
 };
 
-// set Users playlists
+// set User's Playlists
 export const setMyPlaylists = (data) => (dispatch) => {
 	dispatch({ type: SET_MY_PLAYLISTS, payload: data });
+};
+
+// Add to User's Playlists
+export const addToMyPlaylists = (data) => (dispatch) => {
+	dispatch({ type: ADD_TO_MY_PLAYLISTS, payload: data });
+};
+
+// Remove from My Playlists
+export const removeFromMyPlaylists = (i) => (dispatch) => {
+	dispatch({ type: REMOVE_FROM_MY_PLAYLISTS, payload: i });
 };
 
 // toggle my playlist
