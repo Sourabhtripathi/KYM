@@ -1,17 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import isEmpty from 'is-empty';
-import { getPlaylist, getOpenPlaylist, addRating } from '../helpers';
+import {
+	getPlaylist,
+	getOpenPlaylist,
+	addRating,
+	areFollowingPlaylist,
+	followPlaylist,
+	unfollowPlaylist
+} from '../helpers';
 
 const Playlist = (props) => {
 	const [ playlist, setPlaylist ] = useState({});
 	const [ isOpen, setIsOpen ] = useState(false);
 	const [ rated, setRated ] = useState(false);
+	const [ follow, setFollow ] = useState(null);
 	const [ openPlaylist, setOpenPlaylist ] = useState({});
 	useEffect(
 		() => {
 			getPlaylist(props.match.params.pid).then((data) => {
 				setPlaylist(data);
+				areFollowingPlaylist(data.id, [ props.auth.user.id ]).then((res) => {
+					if (res[0]) {
+						setFollow(true);
+					} else {
+						setFollow(false);
+					}
+				});
 			});
 
 			getOpenPlaylist(props.match.params.pid).then((res) => {
@@ -49,7 +64,6 @@ const Playlist = (props) => {
 		console.log(e.currentTarget.rating.value);
 		console.log(props.auth.user);
 		const response = await addRating(openPlaylist.playlistId, props.auth.user.id, e.currentTarget.rating.value);
-		console.log(response);
 	};
 
 	const renderRatingOption = () => {
@@ -67,10 +81,31 @@ const Playlist = (props) => {
 		}
 	};
 
+	const onFollowClick = () => {
+		console.log(playlist.id);
+		if (follow) {
+			unfollowPlaylist(playlist.id);
+		} else {
+			followPlaylist(playlist.id);
+		}
+	};
+
+	const renderFollowButton = () => {
+		if (follow === null) return null;
+		if (!follow) {
+			return <button onClick={onFollowClick}>Follow</button>;
+		} else {
+			return <button onClick={onFollowClick}>Unfollow</button>;
+		}
+	};
+
 	if (isEmpty(playlist)) return <div>Loading</div>;
 	return (
 		<div>
-			<h1>{playlist.name}</h1>
+			<h1>
+				{playlist.name}
+				<span> {renderFollowButton()}</span>
+			</h1>
 			<h3>Tracks</h3>
 			<ul>{renderTracks()}</ul>
 			{isOpen ? <h2>Rating : {openPlaylist.overallRating}</h2> : null}

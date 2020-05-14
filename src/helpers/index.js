@@ -82,18 +82,17 @@ export const getMyTopTracks = (user) => {
 	});
 };
 
-export const getUserPlaylists = (user) => {
-	return spotifyApi.getUserPlaylists(user).then((res) => {
-		return res.items;
-	});
-};
+export const getUserPlaylists = (user) => spotifyApi.getUserPlaylists(user).then((res) => res.items);
 
 // Fetch playlist details
-export const getPlaylist = (pid) => {
-	return spotifyApi.getPlaylist(pid).then((res) => {
-		return res;
-	});
-};
+export const getPlaylist = (pid) => spotifyApi.getPlaylist(pid).then((response) => response);
+
+export const areFollowingPlaylist = (pid, users) =>
+	spotifyApi.areFollowingPlaylist(pid, users).then((response) => response);
+
+export const followPlaylist = (pid) => spotifyApi.followPlaylist(pid).then((response) => response);
+
+export const unfollowPlaylist = (pid) => spotifyApi.unfollowPlaylist(pid).then((response) => response);
 
 // Api requests on own server
 export const addOpenPlaylist = async (body) => {
@@ -118,9 +117,6 @@ export const getOpenPlaylist = async (pid) => {
 };
 
 export const addRating = async (pid, uid, rating) => {
-	console.log(pid);
-	console.log(uid);
-	console.log(rating);
 	const body = {
 		userId: uid,
 		rating: rating
@@ -141,4 +137,9 @@ export const found = (array, value) => {
 		}
 	}
 	return retVal;
+};
+
+export const compareValues = (a, b) => {
+	if (a > b) return b - a;
+	else return a - b;
 };

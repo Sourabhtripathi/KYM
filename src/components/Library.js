@@ -35,6 +35,7 @@ const Library = (props) => {
 	};
 
 	const renderButton = (index) => {
+		console.log(props.myPlaylists[index]);
 		if (!props.myPlaylists[index].open && props.myPlaylists[index].public) {
 			return (
 				<button

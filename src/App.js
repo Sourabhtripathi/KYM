@@ -24,12 +24,12 @@ import {
 	getMyTopTracks,
 	getUserPlaylists,
 	getOpenPlaylists,
-	found
+	found,
+	compareValues
 } from './helpers/index.js';
 
 const App = (props) => {
 	const [ timeLeft, setTimeLeft ] = useState(calculateTimeLeft());
-
 	useEffect(
 		() => {
 			if (props.auth.isAuthenticated) {
@@ -44,6 +44,10 @@ const App = (props) => {
 							} else {
 								playlist.open = false;
 							}
+						});
+						res.data.sort((a, b) => {
+							if (a.overallRating > b.overallRating) return b.overallRating - a.overallRating;
+							return a.overallRating - b.overallRating;
 						});
 						props.setMyPlaylists(data);
 						props.setOpenPlaylists(res.data);

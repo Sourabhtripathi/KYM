@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 
 const Discover = (props) => {
 	const [ type, setType ] = useState('playlists');
-	const [ openPlaylists, setOpenPlaylists ] = useState([]);
 
 	useEffect(
 		() => {
