@@ -1,6 +1,7 @@
 import server from '../apis/server';
 import isEmpty from 'is-empty';
 import SpotifyWebApi from 'spotify-web-api-js';
+import FuzzySearch from 'fuzzy-search';
 const spotifyApi = new SpotifyWebApi();
 
 // Auth Configuration
@@ -94,6 +95,8 @@ export const followPlaylist = (pid) => spotifyApi.followPlaylist(pid).then((resp
 
 export const unfollowPlaylist = (pid) => spotifyApi.unfollowPlaylist(pid).then((response) => response);
 
+export const getUserInfo = (uid) => spotifyApi.getUser(uid).then((response) => response);
+
 // Api requests on own server
 export const addOpenPlaylist = async (body) => {
 	const response = await server.post('/add_open_playlist', body);
@@ -142,4 +145,18 @@ export const found = (array, value) => {
 export const compareValues = (a, b) => {
 	if (a > b) return b - a;
 	else return a - b;
+};
+
+export const onPlaylistClick = (id) => {
+	window.open(`https://open.spotify.com/playlist/${id}`);
+};
+
+export const onUserClick = (id) => {
+	window.open(`https://open.spotify.com/user/${id}`);
+};
+
+export const search = (haystack, keys, needle, options) => {
+	const searcher = new FuzzySearch(haystack, keys, options);
+	const result = searcher.search(needle);
+	return result;
 };

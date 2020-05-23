@@ -2,12 +2,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setMyPlaylists, addToOpenPlaylists, removeFromOpenPlaylists, togglePlaylist } from '../actions';
-import { addOpenPlaylist, removeOpenPlaylist } from '../helpers/index.js';
+import { addOpenPlaylist, removeOpenPlaylist, onPlaylistClick } from '../helpers/index.js';
 
 const Library = (props) => {
-	const onAddClick = async (pid, pname, uid, images, i) => {
+	const onAddClick = async (pid, pname, uid, uname, images, i) => {
 		const body = {
 			userId: uid,
+			userName: uname,
 			playlistId: pid,
 			playlistName: pname,
 			overallRating: 0,
@@ -42,7 +43,8 @@ const Library = (props) => {
 						onAddClick(
 							props.myPlaylists[index].id,
 							props.myPlaylists[index].name,
-							props.myPlaylists[index].owner.id,
+							props.user.id,
+							props.user.display_name,
 							props.myPlaylists[index].images,
 							index
 						);
@@ -73,8 +75,8 @@ const Library = (props) => {
 				{props.myPlaylists.map((playlist, index) => {
 					return (
 						<li key={index}>
-							<span>
-								<Link to={`/playlist/${playlist.id}`}>{playlist.name} </Link>
+							<span className="playlist" onClick={() => onPlaylistClick(playlist.id)}>
+								{playlist.name}{' '}
 							</span>
 							{playlist.owner.id === props.user.id ? renderButton(index) : null}
 						</li>

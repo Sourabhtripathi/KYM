@@ -27,9 +27,11 @@ import {
 	found,
 	compareValues
 } from './helpers/index.js';
+import './assets/stylesheets/App.css';
 
 const App = (props) => {
 	const [ timeLeft, setTimeLeft ] = useState(calculateTimeLeft());
+	const [ myself, setMyself ] = useState(false);
 	useEffect(
 		() => {
 			if (props.auth.isAuthenticated) {
@@ -45,9 +47,10 @@ const App = (props) => {
 								playlist.open = false;
 							}
 						});
+						console.log(res.data);
 						res.data.sort((a, b) => {
-							if (a.overallRating > b.overallRating) return b.overallRating - a.overallRating;
-							return a.overallRating - b.overallRating;
+							if (a.overallRating > b.overallRating) return -1;
+							return 1;
 						});
 						props.setMyPlaylists(data);
 						props.setOpenPlaylists(res.data);
@@ -61,12 +64,10 @@ const App = (props) => {
 	useEffect(
 		() => {
 			const params = getParams();
-			let token = '';
 			if (isEmpty(params)) {
 				if (localStorage.accessToken) {
 					// check if token is valid and also check if user stills exists in db
 					if (isValid()) {
-						token = localStorage.accessToken;
 						setTimeout(() => {
 							setTimeLeft(calculateTimeLeft());
 						}, 1000);
@@ -76,7 +77,6 @@ const App = (props) => {
 						setTimeout(() => {
 							setTimeLeft(calculateTimeLeft());
 						}, 1000);
-						token = localStorage.accessToken;
 					}
 				} else {
 					props.setUserNotLoading();
@@ -85,18 +85,21 @@ const App = (props) => {
 				// returned from server
 				console.log(params);
 				updateTokens(params);
-				token = params.accessToken;
-			}
-
-			if (token !== '') {
-				setAccessToken(token);
-				setMe().then((data) => {
-					props.loginUser(data);
-					props.setUserNotLoading();
-				});
 			}
 		},
-		[ timeLeft, localStorage.accessToken ]
+		[ timeLeft ]
+	);
+
+	useEffect(
+		() => {
+			setAccessToken(localStorage.accessToken);
+			setMe().then((data) => {
+				props.loginUser(data);
+				props.setUserNotLoading();
+			});
+			setMyself(true);
+		},
+		[ myself, localStorage.accessToken ]
 	);
 
 	if (props.auth.isAuthenticated) {

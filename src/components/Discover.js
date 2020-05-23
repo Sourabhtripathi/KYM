@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-// import useForceUpdate from 'use-force-update';
 import { connect } from 'react-redux';
-import { addRating } from '../helpers';
+import { addRating, onPlaylistClick, onUserClick } from '../helpers';
 import { addToRatedBy } from '../actions';
 
 const Discover = (props) => {
 	const [ type, setType ] = useState('playlists');
-	// const forceUpdate = useForceUpdate();
 
 	useEffect(() => {
 		console.log('discover mounted');
@@ -37,10 +35,6 @@ const Discover = (props) => {
 		return false;
 	};
 
-	const onPlaylistClick = (pid) => {
-		window.open(`https://open.spotify.com/playlist/${pid}`);
-	};
-
 	const renderRatingOption = (pid, uid, ratedBy, index) => {
 		if (props.auth.user.id !== uid && !isRated(ratedBy)) {
 			return (
@@ -60,7 +54,17 @@ const Discover = (props) => {
 		return props.user.openPlaylists.map((playlist, index) => {
 			return (
 				<li key={index}>
-					<h3 onClick={() => onPlaylistClick(playlist.playlistId)}>{playlist.playlistName} </h3>
+					<span className="playlist" onClick={() => onPlaylistClick(playlist.playlistId)}>
+						{playlist.playlistName}{' '}
+					</span>
+					<span>
+						{' '}
+						::{' '}
+						<span className="user" onClick={() => onUserClick(playlist.userId)}>
+							{playlist.userName}
+						</span>{' '}
+						::{' '}
+					</span>
 					<span>Rating : {playlist.overallRating}</span>
 					{renderRatingOption(playlist.playlistId, playlist.userId, playlist.ratedBy, index)}
 				</li>
