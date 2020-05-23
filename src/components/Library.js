@@ -5,16 +5,17 @@ import { setMyPlaylists, addToOpenPlaylists, removeFromOpenPlaylists, togglePlay
 import { addOpenPlaylist, removeOpenPlaylist } from '../helpers/index.js';
 
 const Library = (props) => {
-	const onAddClick = async (pid, pname, uid, i) => {
+	const onAddClick = async (pid, pname, uid, images, i) => {
 		const body = {
 			userId: uid,
 			playlistId: pid,
 			playlistName: pname,
 			overallRating: 0,
 			totalRating: 0,
-			ratedBy: []
+			ratedBy: [],
+			images: [ ...images ]
 		};
-		const response = await addOpenPlaylist(body);
+		await addOpenPlaylist(body);
 		const payload = {
 			index: i,
 			val: true
@@ -24,7 +25,7 @@ const Library = (props) => {
 	};
 
 	const onRemoveClick = async (pid, i) => {
-		const response = await removeOpenPlaylist(pid);
+		await removeOpenPlaylist(pid);
 		const payload = {
 			index: i,
 			val: false
@@ -42,6 +43,7 @@ const Library = (props) => {
 							props.myPlaylists[index].id,
 							props.myPlaylists[index].name,
 							props.myPlaylists[index].owner.id,
+							props.myPlaylists[index].images,
 							index
 						);
 					}}
@@ -74,7 +76,7 @@ const Library = (props) => {
 							<span>
 								<Link to={`/playlist/${playlist.id}`}>{playlist.name} </Link>
 							</span>
-							{renderButton(index)}
+							{playlist.owner.id === props.user.id ? renderButton(index) : null}
 						</li>
 					);
 				})}

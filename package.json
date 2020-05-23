@@ -17,7 +17,9 @@
 		"react-scripts": "3.4.1",
 		"redux": "^4.0.5",
 		"redux-thunk": "^2.3.0",
-		"spotify-web-api-js": "^1.4.0"
+		"spotify-web-api-js": "^1.4.0",
+		"spotify-web-sdk": "^0.6.1",
+		"use-force-update": "^1.0.7"
 	},
 	"scripts": {
 		"start": "react-scripts start",
@@ -29,7 +31,15 @@
 		"extends": "react-app"
 	},
 	"browserslist": {
-		"production": [ ">0.2%", "not dead", "not op_mini all" ],
-		"development": [ "last 1 chrome version", "last 1 firefox version", "last 1 safari version" ]
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
 	}
 }

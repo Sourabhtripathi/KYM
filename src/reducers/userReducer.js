@@ -6,7 +6,8 @@ import {
 	REMOVE_FROM_OPEN_PLAYLISTS,
 	TOGGLE_PLAYLIST,
 	ADD_TO_MY_PLAYLISTS,
-	REMOVE_FROM_MY_PLAYLISTS
+	REMOVE_FROM_MY_PLAYLISTS,
+	ADD_TO_RATED_BY
 } from '../actions/types';
 const initialState = {
 	myTopTracks: [],
@@ -14,6 +15,16 @@ const initialState = {
 	openPlaylists: [],
 	similarUsers: []
 };
+
+const getUpdatedOpenPlaylists = (state, action) => {
+	return state.openPlaylists.map((playlist, index) => {
+		if (index !== action.payload.index) {
+			return playlist;
+		}
+		return action.payload.data;
+	});
+};
+
 export default function(state = initialState, action) {
 	switch (action.type) {
 		case SET_TOP_TRACKS:
@@ -59,6 +70,12 @@ export default function(state = initialState, action) {
 			return {
 				...state,
 				openPlaylists: [ ...state.openPlaylists, action.payload ]
+			};
+
+		case ADD_TO_RATED_BY:
+			return {
+				...state,
+				openPlaylists: getUpdatedOpenPlaylists(state, action)
 			};
 		case REMOVE_FROM_OPEN_PLAYLISTS:
 			return {

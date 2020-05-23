@@ -42,7 +42,7 @@ export const isValid = () => {
 
 export const calculateTimeLeft = () => {
 	let timeLeft = 10;
-	if (localStorage.accessToken && localStorage.accessToken !== NaN) {
+	if (localStorage.accessToken) {
 		const difference = localStorage.token_expire_time - new Date().getTime();
 		if (difference > 0) {
 			timeLeft = difference;
@@ -55,11 +55,11 @@ export const updateTokens = (params) => {
 	let d = new Date();
 	// d.setSeconds(d.getSeconds() + 30);
 	d.setSeconds(d.getSeconds() + 3600);
-	console.log(d.getTime());
 	if (!params.refreshToken) {
 		// refreshed token-- just change access token and time
 		localStorage.setItem('accessToken', params.accessToken);
 		localStorage.setItem('token_expire_time', d.getTime());
+		console.log('here');
 		window.close();
 	} else {
 		localStorage.setItem('accessToken', params.accessToken);

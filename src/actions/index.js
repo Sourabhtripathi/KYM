@@ -8,7 +8,8 @@ import {
 	REMOVE_FROM_OPEN_PLAYLISTS,
 	TOGGLE_PLAYLIST,
 	ADD_TO_MY_PLAYLISTS,
-	REMOVE_FROM_MY_PLAYLISTS
+	REMOVE_FROM_MY_PLAYLISTS,
+	ADD_TO_RATED_BY
 } from './types';
 
 // set Users top tracks
@@ -44,6 +45,11 @@ export const setOpenPlaylists = (data) => (dispatch) => {
 // Add to Open Playlists
 export const addToOpenPlaylists = (data) => (dispatch) => {
 	dispatch({ type: ADD_TO_OPEN_PLAYLISTS, payload: data });
+};
+
+// Update rated by of open playlist
+export const addToRatedBy = (data) => (dispatch) => {
+	dispatch({ type: ADD_TO_RATED_BY, payload: data });
 };
 
 // Remove from Open Playlists

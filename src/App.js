@@ -83,6 +83,7 @@ const App = (props) => {
 				}
 			} else {
 				// returned from server
+				console.log(params);
 				updateTokens(params);
 				token = params.accessToken;
 			}
@@ -102,7 +103,6 @@ const App = (props) => {
 		return (
 			<BrowserRouter history={history}>
 				<Header />
-				<Route path="/playlist/:pid" component={Playlist} />
 				<Route path="/profile" component={Profile} />
 				<Route path="/library" component={Library} />
 				<Route path="/about" component={About} />
