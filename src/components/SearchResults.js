@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { search } from '../helpers';
 const SearchResults = ({ query, openPlaylists }) => {
 	const [ playlistContent, setPlaylistContent ] = useState([]);
-	const [ userContent, setUserContent ] = useState([]);
 	useEffect(
 		() => {
 			// Playlists
@@ -30,18 +29,6 @@ const SearchResults = ({ query, openPlaylists }) => {
 			);
 	};
 
-	const renderUserResults = () => {
-		if (userContent.length > 0)
-			return (
-				<div>
-					<h1>Users</h1>
-					{userContent.map((res, index) => {
-						return <li key={index}>{res.userName}</li>;
-					})}
-				</div>
-			);
-	};
-
 	if (query === '') {
 		return (
 			<div>
@@ -49,19 +36,14 @@ const SearchResults = ({ query, openPlaylists }) => {
 			</div>
 		);
 	} else {
-		if (playlistContent.length === 0 && userContent.length === 0) {
+		if (playlistContent.length === 0) {
 			return (
 				<div>
 					<h2>No Results</h2>
 				</div>
 			);
 		} else {
-			return (
-				<div>
-					{renderPlaylistResults()}
-					{renderUserResults()}
-				</div>
-			);
+			return <div>{renderPlaylistResults()}</div>;
 		}
 	}
 };
