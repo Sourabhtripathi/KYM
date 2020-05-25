@@ -7,10 +7,6 @@ import { addToRatedBy } from '../actions';
 const Discover = (props) => {
 	const [ type, setType ] = useState('playlists');
 
-	useEffect(() => {
-		console.log('discover mounted');
-	}, []);
-
 	const onTabSwitch = (val) => {
 		setType(val);
 	};
@@ -54,19 +50,31 @@ const Discover = (props) => {
 		return props.user.openPlaylists.map((playlist, index) => {
 			return (
 				<li key={index}>
-					<span className="playlist" onClick={() => onPlaylistClick(playlist.playlistId)}>
-						{playlist.playlistName}{' '}
-					</span>
-					<span>
-						{' '}
-						::{' '}
-						<span className="user" onClick={() => onUserClick(playlist.userId)}>
-							{playlist.userName}
-						</span>{' '}
-						::{' '}
-					</span>
-					<span>Rating : {playlist.overallRating}</span>
-					{renderRatingOption(playlist.playlistId, playlist.userId, playlist.ratedBy, index)}
+					<div>
+						<header>
+							<span className="playlist" onClick={() => onPlaylistClick(playlist.playlistId)}>
+								{playlist.playlistName}{' '}
+							</span>
+							{playlist.userId === props.auth.user.id ? (
+								<span>
+									{' '}
+									<b>Your</b>{' '}
+								</span>
+							) : null}
+						</header>
+
+						<img src={playlist.images[0].url} style={{ height: '100px', width: '100px' }} />
+						<div>
+							<span>
+								<span className="user" onClick={() => onUserClick(playlist.userId)}>
+									{playlist.userName}
+								</span>{' '}
+								::{' '}
+							</span>
+							<span>Rating : {playlist.overallRating}</span>
+							{renderRatingOption(playlist.playlistId, playlist.userId, playlist.ratedBy, index)}
+						</div>
+					</div>
 				</li>
 			);
 		});

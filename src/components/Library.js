@@ -75,10 +75,15 @@ const Library = (props) => {
 				{props.myPlaylists.map((playlist, index) => {
 					return (
 						<li key={index}>
-							<span className="playlist" onClick={() => onPlaylistClick(playlist.id)}>
-								{playlist.name}{' '}
-							</span>
-							{playlist.owner.id === props.user.id ? renderButton(index) : null}
+							<div>
+								<header>
+									<span className="playlist" onClick={() => onPlaylistClick(playlist.id)}>
+										{playlist.name}{' '}
+									</span>
+								</header>
+								<img src={playlist.images[0].url} style={{ height: '100px', width: '100px' }} />
+								{playlist.owner.id === props.user.id ? renderButton(index) : null}
+							</div>
 						</li>
 					);
 				})}

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { search } from '../helpers';
+import default_avatar from '../assets/images/default_avatar.jpg';
+import { onPlaylistClick, onUserClick } from '../helpers';
 
 const SearchResults = ({ query, openPlaylists, registeredUsers }) => {
 	const [ playlistContent, setPlaylistContent ] = useState([]);
@@ -18,8 +20,6 @@ const SearchResults = ({ query, openPlaylists, registeredUsers }) => {
 			keys = [ 'name' ];
 			result = search(registeredUsers, keys, query, options);
 			setUserContent(result);
-			console.log(playlistContent);
-			console.log(userContent);
 		},
 		[ query ]
 	);
@@ -35,8 +35,19 @@ const SearchResults = ({ query, openPlaylists, registeredUsers }) => {
 			return (
 				<div>
 					<h1>Playlists</h1>
-					{playlistContent.map((res, index) => {
-						return <li key={index}>{res.playlistName}</li>;
+					{playlistContent.map((playlist, index) => {
+						return (
+							<li key={index}>
+								<div>
+									<header>
+										<span className="playlist" onClick={() => onPlaylistClick(playlist.playlistId)}>
+											{playlist.playlistName}
+										</span>
+									</header>
+									<img src={playlist.images[0].url} style={{ height: '100px', width: '100px' }} />
+								</div>
+							</li>
+						);
 					})}
 				</div>
 			);
@@ -54,8 +65,23 @@ const SearchResults = ({ query, openPlaylists, registeredUsers }) => {
 			return (
 				<div>
 					<h1>Users</h1>
-					{userContent.map((res, index) => {
-						return <li key={index}>{res.name}</li>;
+					{userContent.map((user, index) => {
+						console.log(user.images);
+						return (
+							<li key={index}>
+								<div>
+									<header>
+										<span className="playlist" onClick={() => onUserClick(user.userId)}>
+											{user.name}
+										</span>
+									</header>
+									<img
+										src={user.images.length > 0 ? user.images[0].url : default_avatar}
+										style={{ height: '100px', width: '100px' }}
+									/>
+								</div>
+							</li>
+						);
 					})}
 				</div>
 			);
