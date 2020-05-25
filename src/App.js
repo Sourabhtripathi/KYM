@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { loginUser, setUserNotLoading, setMyTopTracks, setMyPlaylists, setOpenPlaylists } from './actions';
+import {
+	loginUser,
+	setUserNotLoading,
+	setMyTopTracks,
+	setMyPlaylists,
+	setOpenPlaylists,
+	setRegisteredUsers
+} from './actions';
 import history from './history';
 import { connect } from 'react-redux';
 import Header from './layouts/Header';
@@ -25,7 +32,8 @@ import {
 	getUserPlaylists,
 	getOpenPlaylists,
 	found,
-	compareValues
+	compareValues,
+	getRegisteredUsers
 } from './helpers/index.js';
 import './assets/stylesheets/App.css';
 
@@ -47,7 +55,6 @@ const App = (props) => {
 								playlist.open = false;
 							}
 						});
-						console.log(res.data);
 						res.data.sort((a, b) => {
 							if (a.overallRating > b.overallRating) return -1;
 							return 1;
@@ -55,6 +62,9 @@ const App = (props) => {
 						props.setMyPlaylists(data);
 						props.setOpenPlaylists(res.data);
 					});
+				});
+				getRegisteredUsers().then((res) => {
+					props.setRegisteredUsers(res.data);
 				});
 			}
 		},
@@ -122,13 +132,13 @@ const App = (props) => {
 };
 const mapStateToProps = (state) => ({
 	auth: state.auth,
-	user: state.user,
-	errors: state.errors
+	user: state.user
 });
 export default connect(mapStateToProps, {
 	loginUser,
 	setUserNotLoading,
 	setMyTopTracks,
 	setMyPlaylists,
-	setOpenPlaylists
+	setOpenPlaylists,
+	setRegisteredUsers
 })(App);

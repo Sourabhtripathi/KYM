@@ -119,6 +119,11 @@ export const getOpenPlaylist = async (pid) => {
 	return response;
 };
 
+export const getRegisteredUsers = async () => {
+	const response = await server.get('/users');
+	return response;
+};
+
 export const addRating = async (pid, uid, rating) => {
 	const body = {
 		userId: uid,

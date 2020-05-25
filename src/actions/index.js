@@ -9,8 +9,14 @@ import {
 	TOGGLE_PLAYLIST,
 	ADD_TO_MY_PLAYLISTS,
 	REMOVE_FROM_MY_PLAYLISTS,
-	ADD_TO_RATED_BY
+	ADD_TO_RATED_BY,
+	SET_REGISTERED_USERS
 } from './types';
+
+// set Registered Users
+export const setRegisteredUsers = (data) => (dispatch) => {
+	dispatch({ type: SET_REGISTERED_USERS, payload: data });
+};
 
 // set Users top tracks
 export const setMyTopTracks = (data) => (dispatch) => {

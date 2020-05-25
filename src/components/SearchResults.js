@@ -1,24 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { search } from '../helpers';
-const SearchResults = ({ query, openPlaylists }) => {
+
+const SearchResults = ({ query, openPlaylists, registeredUsers }) => {
 	const [ playlistContent, setPlaylistContent ] = useState([]);
+	const [ userContent, setUserContent ] = useState([]);
 	useEffect(
 		() => {
 			// Playlists
-			const keys = [ 'userName', 'playlistName' ];
-			const options = {
+			let keys = [ 'playlistName' ];
+			let options = {
 				caseSensitive: false,
 				sort: true
 			};
-			const result = search(openPlaylists, keys, query, options);
+			let result = search(openPlaylists, keys, query, options);
 			setPlaylistContent(result);
+			keys = [ 'name' ];
+			result = search(registeredUsers, keys, query, options);
+			setUserContent(result);
+			console.log(playlistContent);
+			console.log(userContent);
 		},
 		[ query ]
 	);
 
 	const renderPlaylistResults = () => {
-		if (playlistContent.length > 0)
+		if (playlistContent.length === 0) {
+			return (
+				<div>
+					<h2>No Playlist found</h2>
+				</div>
+			);
+		} else {
 			return (
 				<div>
 					<h1>Playlists</h1>
@@ -27,30 +40,48 @@ const SearchResults = ({ query, openPlaylists }) => {
 					})}
 				</div>
 			);
+		}
+	};
+
+	const renderUserResults = () => {
+		if (userContent.length === 0) {
+			return (
+				<div>
+					<h2>No User found</h2>
+				</div>
+			);
+		} else {
+			return (
+				<div>
+					<h1>Users</h1>
+					{userContent.map((res, index) => {
+						return <li key={index}>{res.name}</li>;
+					})}
+				</div>
+			);
+		}
 	};
 
 	if (query === '') {
 		return (
 			<div>
-				<h2>Search Something</h2>
+				<h2>Search for a playlist or a user</h2>
 			</div>
 		);
 	} else {
-		if (playlistContent.length === 0) {
-			return (
-				<div>
-					<h2>No Results</h2>
-				</div>
-			);
-		} else {
-			return <div>{renderPlaylistResults()}</div>;
-		}
+		return (
+			<div>
+				{renderPlaylistResults()}
+				{renderUserResults()}
+			</div>
+		);
 	}
 };
 
 const mapStateToProps = (state) => {
 	return {
-		openPlaylists: state.user.openPlaylists
+		openPlaylists: state.user.openPlaylists,
+		registeredUsers: state.db.registeredUsers
 	};
 };
 

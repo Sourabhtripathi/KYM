@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setMyPlaylists, addToOpenPlaylists, removeFromOpenPlaylists, togglePlaylist } from '../actions';
-import { addOpenPlaylist, removeOpenPlaylist, onPlaylistClick } from '../helpers/index.js';
+import { addOpenPlaylist, removeOpenPlaylist, onPlaylistClick } from '../helpers';
 
 const Library = (props) => {
 	const onAddClick = async (pid, pname, uid, uname, images, i) => {
