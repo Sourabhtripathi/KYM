@@ -16,9 +16,6 @@ const Toolbar = () => {
 				<Link to="/library">Library</Link>
 			</span>
 			<span style={{ margin: '10px' }}>
-				<Link to="/profile">Profile</Link>
-			</span>
-			<span style={{ margin: '10px' }}>
 				<Link to="/about">About</Link>
 			</span>
 		</div>

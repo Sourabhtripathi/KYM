@@ -13,7 +13,6 @@ import { connect } from 'react-redux';
 import Header from './layouts/Header';
 import Home from './components/Home';
 import Discover from './components/Discover';
-import Profile from './components/Profile';
 import Library from './components/Library';
 import About from './components/About';
 import Search from './components/Search';
@@ -116,12 +115,13 @@ const App = (props) => {
 		return (
 			<BrowserRouter history={history}>
 				<Header />
-				<Route path="/profile" component={Profile} />
-				<Route path="/library" component={Library} />
-				<Route path="/about" component={About} />
-				<Route path="/search" component={Search} />
-				<Route path="/discover" component={Discover} />
-				<Route exact path="/" component={Home} />
+				<Switch>
+					<Route exact path="/library" component={Library} />
+					<Route exact path="/about" component={About} />
+					<Route exact path="/search" component={Search} />
+					<Route exact path="/discover" component={Discover} />
+					<Route path="/" component={Home} />
+				</Switch>
 				<Toolbar />
 			</BrowserRouter>
 		);

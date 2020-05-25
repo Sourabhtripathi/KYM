@@ -60,7 +60,6 @@ export const updateTokens = (params) => {
 		// refreshed token-- just change access token and time
 		localStorage.setItem('accessToken', params.accessToken);
 		localStorage.setItem('token_expire_time', d.getTime());
-		console.log('here');
 		window.close();
 	} else {
 		localStorage.setItem('accessToken', params.accessToken);
@@ -100,7 +99,6 @@ export const getUserInfo = (uid) => spotifyApi.getUser(uid).then((response) => r
 // Api requests on own server
 export const addOpenPlaylist = async (body) => {
 	const response = await server.post('/add_open_playlist', body);
-	console.log(response);
 	return response;
 };
 
