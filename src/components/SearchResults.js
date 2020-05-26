@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { search } from '../helpers';
 import default_avatar from '../assets/images/default_avatar.jpg';
 import { onPlaylistClick, onUserClick } from '../helpers';
+import { IonContent } from '@ionic/react';
 
 const SearchResults = ({ query, openPlaylists, registeredUsers }) => {
 	const [ playlistContent, setPlaylistContent ] = useState([]);
@@ -96,10 +97,10 @@ const SearchResults = ({ query, openPlaylists, registeredUsers }) => {
 		);
 	} else {
 		return (
-			<div>
+			<IonContent>
 				{renderPlaylistResults()}
 				{renderUserResults()}
-			</div>
+			</IonContent>
 		);
 	}
 };

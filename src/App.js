@@ -35,10 +35,35 @@ import {
 	getRegisteredUsers
 } from './helpers/index.js';
 import './assets/stylesheets/App.css';
+import { IonApp, IonRouterOutlet } from '@ionic/react';
+import { IonReactRouter } from '@ionic/react-router';
+
+// importing bootstrap
+// import 'bootstrap/dist/css/bootstrap.min.css';
+
+/* Core CSS required for Ionic components to work properly */
+import '@ionic/react/css/core.css';
+
+/* Basic CSS for apps built with Ionic */
+import '@ionic/react/css/normalize.css';
+import '@ionic/react/css/structure.css';
+import '@ionic/react/css/typography.css';
+
+/* Optional CSS utils that can be commented out */
+import '@ionic/react/css/padding.css';
+import '@ionic/react/css/float-elements.css';
+import '@ionic/react/css/text-alignment.css';
+import '@ionic/react/css/text-transformation.css';
+import '@ionic/react/css/flex-utils.css';
+import '@ionic/react/css/display.css';
+
+/* Theme variables */
+import './theme/variables.css';
 
 const App = (props) => {
 	const [ timeLeft, setTimeLeft ] = useState(calculateTimeLeft());
 	const [ myself, setMyself ] = useState(false);
+
 	useEffect(
 		() => {
 			if (props.auth.isAuthenticated) {
@@ -92,7 +117,6 @@ const App = (props) => {
 				}
 			} else {
 				// returned from server
-				console.log(params);
 				updateTokens(params);
 			}
 		},
@@ -113,21 +137,41 @@ const App = (props) => {
 
 	if (props.auth.isAuthenticated) {
 		return (
-			<BrowserRouter history={history}>
-				<Header />
-				<Switch>
-					<Route exact path="/library" component={Library} />
-					<Route exact path="/about" component={About} />
-					<Route exact path="/search" component={Search} />
-					<Route exact path="/discover" component={Discover} />
-					<Route path="/" component={Home} />
-				</Switch>
-				<Toolbar />
-			</BrowserRouter>
+			<IonApp>
+				{/* <IonReactRouter>
+					<IonRouterOutlet> */}
+				<BrowserRouter>
+					<Header />
+					<Switch>
+						<Route exact path="/library" component={Library} />
+						<Route exact path="/about" component={About} />
+						<Route exact path="/search" component={Search} />
+						<Route exact path="/discover" component={Discover} />
+						<Route path="/" component={Home} />
+					</Switch>
+					<Toolbar />
+				</BrowserRouter>
+				{/* </IonRouterOutlet>
+				</IonReactRouter> */}
+			</IonApp>
 		);
 	} else {
-		if (props.auth.loading) return <div>Loading</div>;
-		else return <Landing />;
+		if (props.auth.loading)
+			return (
+				<IonApp>
+					<div>Loading</div>
+				</IonApp>
+			);
+		else
+			return (
+				<IonApp>
+					<IonReactRouter>
+						<IonRouterOutlet>
+							<Route path="/" component={Landing} />
+						</IonRouterOutlet>
+					</IonReactRouter>
+				</IonApp>
+			);
 	}
 };
 const mapStateToProps = (state) => ({

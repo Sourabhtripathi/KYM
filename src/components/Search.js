@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import SearchResults from './SearchResults';
+import { IonContent } from '@ionic/react';
 const Search = () => {
 	const [ query, setQuery ] = useState('');
 
@@ -12,14 +13,14 @@ const Search = () => {
 	};
 
 	return (
-		<div>
+		<IonContent>
 			<form onSubmit={onSubmit}>
 				<label>Search for an open playlist or a user</label>
 				<input type="text" value={query} onChange={onChange} />
 				<button>Search</button>
 			</form>
 			<SearchResults query={query} />
-		</div>
+		</IonContent>
 	);
 };
 export default Search;

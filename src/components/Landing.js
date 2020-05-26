@@ -1,11 +1,13 @@
 import React from 'react';
+import { IonContent } from '@ionic/react';
+import { serverUrl } from '../variables';
 
 const Landing = () => {
 	return (
-		<div>
+		<IonContent>
 			<h1>Landing</h1>
-			<a href="http://localhost:3005/login">Login with Spotify</a>
-		</div>
+			<a href={`${serverUrl}/login`}>Login with Spotify</a>
+		</IonContent>
 	);
 };
 export default Landing;

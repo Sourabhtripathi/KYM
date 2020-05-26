@@ -1,0 +1,7 @@
+{
+	"name": "kym",
+	"integrations": {
+		"capacitor": {}
+	},
+	"type": "react"
+}
