@@ -18,6 +18,7 @@ import About from './components/About';
 import Search from './components/Search';
 import Toolbar from './components/Toolbar';
 import Landing from './components/Landing';
+// import AppUrlListener from './components/AppUrlListener';
 import Playlist from './components/Playlist';
 import isEmpty from 'is-empty';
 import {
@@ -141,6 +142,7 @@ const App = (props) => {
 				{/* <IonReactRouter>
 					<IonRouterOutlet> */}
 				<BrowserRouter>
+					{/* <AppUrlListener /> */}
 					<Header />
 					<Switch>
 						<Route exact path="/library" component={Library} />
