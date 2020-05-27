@@ -2,7 +2,23 @@ import server from '../apis/server';
 import isEmpty from 'is-empty';
 import SpotifyWebApi from 'spotify-web-api-js';
 import FuzzySearch from 'fuzzy-search';
+import { Plugins } from '@capacitor/core';
 const spotifyApi = new SpotifyWebApi();
+const { Storage } = Plugins;
+
+// Storage functions
+export const setStorage = async (key, value) => {
+	await Storage.set({ key: key, value: value });
+};
+
+export const getStorage = async (key) => {
+	const { value } = await Storage.get({ key: key });
+	return value;
+};
+
+export const removeStorage = async (key) => {
+	await Storage.remove({ key });
+};
 
 // Auth Configuration
 export const setAccessToken = (token) => {
@@ -35,37 +51,47 @@ export const getParams = () => {
 	return JSON.parse(Object.keys(data)[0]);
 };
 
-export const isValid = () => {
+export const isValid = async () => {
 	const d = new Date();
-	if (d.getTime() <= parseInt(localStorage.token_expire_time)) return true;
-	return false;
+
+	return getStorage('token_expire_time').then((data) => {
+		if (d.getTime() <= parseInt(data)) return true;
+		return false;
+	});
 };
 
-export const calculateTimeLeft = () => {
+export const calculateTimeLeft = async () => {
 	let timeLeft = 10;
-	if (localStorage.accessToken) {
-		const difference = localStorage.token_expire_time - new Date().getTime();
-		if (difference > 0) {
-			timeLeft = difference;
-		}
-	}
-	return timeLeft;
+	return getStorage('token_expire_time').then((token_expire_time) => {
+		return getStorage('accessToken').then((accessToken) => {
+			if (accessToken) {
+				const difference = token_expire_time - new Date().getTime();
+				if (difference > 0) {
+					timeLeft = difference;
+				}
+			}
+			return timeLeft;
+		});
+	});
 };
 
-export const updateTokens = (params) => {
+export const updateTokens = async (params) => {
 	let d = new Date();
-	// d.setSeconds(d.getSeconds() + 30);
-	d.setSeconds(d.getSeconds() + 3600);
+	d.setSeconds(d.getSeconds() + 30);
+	// d.setSeconds(d.getSeconds() + 3600);
 	if (!params.refreshToken) {
 		// refreshed token-- just change access token and time
-		localStorage.setItem('accessToken', params.accessToken);
-		localStorage.setItem('token_expire_time', d.getTime());
+		await setStorage('accessToken', params.accessToken);
+		await setStorage('token_expire_time', d.getTime());
 		window.close();
 	} else {
-		localStorage.setItem('accessToken', params.accessToken);
-		localStorage.setItem('refreshToken', params.refreshToken);
-		localStorage.setItem('token_expire_time', d.getTime());
+		await setStorage('accessToken', params.accessToken);
+		await setStorage('refreshToken', params.refreshToken);
+		await setStorage('token_expire_time', d.getTime());
 	}
+	return getStorage('accessToken').then((data) => {
+		return data;
+	});
 };
 
 // Fetch content from spotify api

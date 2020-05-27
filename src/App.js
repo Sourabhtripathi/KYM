@@ -33,7 +33,8 @@ import {
 	getOpenPlaylists,
 	found,
 	compareValues,
-	getRegisteredUsers
+	getRegisteredUsers,
+	getStorage
 } from './helpers/index.js';
 import './assets/stylesheets/App.css';
 import { IonApp, IonRouterOutlet } from '@ionic/react';
@@ -62,8 +63,9 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 
 const App = (props) => {
-	const [ timeLeft, setTimeLeft ] = useState(calculateTimeLeft());
+	const [ timeLeft, setTimeLeft ] = useState(10);
 	const [ myself, setMyself ] = useState(false);
+	const [ token, setToken ] = useState(null);
 
 	useEffect(
 		() => {
@@ -99,41 +101,65 @@ const App = (props) => {
 	useEffect(
 		() => {
 			const params = getParams();
-			if (isEmpty(params)) {
-				if (localStorage.accessToken) {
-					// check if token is valid and also check if user stills exists in db
-					if (isValid()) {
-						setTimeout(() => {
-							setTimeLeft(calculateTimeLeft());
-						}, 1000);
+
+			getStorage('accessToken').then((foundToken) => {
+				console.log('got the token');
+				if (isEmpty(params)) {
+					console.log('empty');
+					if (foundToken) {
+						console.log('token exists');
+						// check if token is valid and also check if user stills exists in db
+						isValid().then((isvalid) => {
+							if (isvalid) {
+								console.log('is valid');
+								setToken(foundToken);
+								setTimeout(() => {
+									calculateTimeLeft().then((data) => {
+										setTimeLeft(data);
+									});
+								}, 1000);
+							} else {
+								console.log('is not valid');
+								// refresh the token
+								getStorage('refreshToken').then((refreshToken) => {
+									window.open(`http://localhost:3005/refresh_token?refresh_token=${refreshToken}`);
+								});
+								setTimeout(() => {
+									calculateTimeLeft().then((data) => {
+										setTimeLeft(data);
+									});
+								}, 1000);
+							}
+						});
 					} else {
-						// refresh the token
-						window.open(`http://localhost:3005/refresh_token?refresh_token=${localStorage.refreshToken}`);
-						setTimeout(() => {
-							setTimeLeft(calculateTimeLeft());
-						}, 1000);
+						console.log("token doesn't exist");
+						props.setUserNotLoading();
 					}
 				} else {
-					props.setUserNotLoading();
+					console.log('not empty');
+					// returned from server
+					updateTokens(params).then((data) => {
+						setToken(data);
+					});
 				}
-			} else {
-				// returned from server
-				updateTokens(params);
-			}
+			});
+			console.log(timeLeft);
 		},
 		[ timeLeft ]
 	);
 
 	useEffect(
 		() => {
-			setAccessToken(localStorage.accessToken);
-			setMe().then((data) => {
-				props.loginUser(data);
-				props.setUserNotLoading();
-			});
-			setMyself(true);
+			if (token) {
+				setAccessToken(token);
+				setMe().then((data) => {
+					props.loginUser(data);
+					props.setUserNotLoading();
+				});
+				setMyself(true);
+			}
 		},
-		[ myself, localStorage.accessToken ]
+		[ myself, token ]
 	);
 
 	if (props.auth.isAuthenticated) {
