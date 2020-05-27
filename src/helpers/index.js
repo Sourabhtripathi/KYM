@@ -163,3 +163,9 @@ export const search = (haystack, keys, needle, options) => {
 	const result = searcher.search(needle);
 	return result;
 };
+
+// test
+export const login = async () => {
+	const res = await server.get('/login');
+	return res;
+};
