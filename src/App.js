@@ -122,10 +122,12 @@ const App = (props) => {
 								console.log('is not valid');
 								// refresh the token
 								getStorage('refreshToken').then((refreshToken) => {
+									console.log(refreshToken);
 									window.open(`http://localhost:3005/refresh_token?refresh_token=${refreshToken}`);
 								});
 								setTimeout(() => {
 									calculateTimeLeft().then((data) => {
+										console.log(data);
 										setTimeLeft(data);
 									});
 								}, 1000);

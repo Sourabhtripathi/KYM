@@ -83,6 +83,7 @@ export const updateTokens = async (params) => {
 		// refreshed token-- just change access token and time
 		await setStorage('accessToken', params.accessToken);
 		await setStorage('token_expire_time', d.getTime());
+		await setStorage('refreshToken', params.refreshToken);
 		window.close();
 	} else {
 		await setStorage('accessToken', params.accessToken);
