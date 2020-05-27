@@ -12,7 +12,7 @@ const Landing = () => {
 	return (
 		<IonContent>
 			<h1>Landing</h1>
-			<a href={`${serverUrl}/login`}>Login with Spotify</a>
+			{/* <a href={`${serverUrl}/login`}>Login with Spotify</a> */}
 			<button onClick={onClick}>Login</button>
 		</IonContent>
 	);
