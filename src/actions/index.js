@@ -10,7 +10,8 @@ import {
 	ADD_TO_MY_PLAYLISTS,
 	REMOVE_FROM_MY_PLAYLISTS,
 	ADD_TO_RATED_BY,
-	SET_REGISTERED_USERS
+	SET_REGISTERED_USERS,
+	SET_DEVICE
 } from './types';
 import { removeStorage } from '../helpers';
 

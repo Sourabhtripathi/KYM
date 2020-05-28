@@ -1,4 +1,4 @@
-import { SET_CURRENT_USER, USER_NOT_LOADING } from '../actions/types';
+import { SET_CURRENT_USER, USER_NOT_LOADING, SET_DEVICE } from '../actions/types';
 const isEmpty = require('is-empty');
 const initialState = {
 	device: null,
