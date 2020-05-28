@@ -84,6 +84,7 @@ const App = (props) => {
 	useEffect(
 		() => {
 			if (props.auth.isAuthenticated) {
+				console.log('is authenticated');
 				getMyTopTracks(props.auth.user.id).then((data) => {
 					props.setMyTopTracks(data);
 				});
@@ -196,7 +197,7 @@ const App = (props) => {
 				// 	}
 			}
 		},
-		[ timeLeft, token ]
+		[ props.auth.device, timeLeft, token ]
 	);
 
 	useEffect(
