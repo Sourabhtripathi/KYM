@@ -1,6 +1,7 @@
 export const config = {
 	clientId: '549a4d6816834a4aa17ed83775760755',
-	redirectUrl: 'https://kymserver.herokuapp.com/callback',
+	redirectUrl: 'https://knowyourmusic.netlify.app/callback',
+	// redirectUrl: 'https://kymserver.herokuapp.com/callback',
 	scopes: [
 		'ugc-image-upload',
 		'user-read-playback-state',

@@ -153,28 +153,35 @@ const App = (props) => {
 							});
 						}
 					}
-					if (device.platform === 'android' || device.platform === 'ios') {
-						await Toast.show({ text: 'in android' });
-						if (!foundToken) {
-							const res = await SpotifyAuth.authorize(config);
+					// if (device.platform === 'android' || device.platform === 'ios') {
+					await Toast.show({ text: 'in android' });
+					if (!foundToken) {
+						SpotifyAuth.authorize(config).then(async (data) => {
 							await Toast.show({ text: 'authorized' });
 							// console.log(`Got an access token, its ${accessToken}!`);
 							// console.log(`Its going to expire in ${expiresAt - Date.now()}ms.`);
-							// setToken(accessToken);
-						} else {
-							isValid().then(async (isvalid) => {
-								if (isvalid) {
-									setToken(foundToken);
-								} else {
-									const res = await SpotifyAuth.authorize(config);
+						});
+
+						// console.log(`Got an access token, its ${accessToken}!`);
+						// console.log(`Its going to expire in ${expiresAt - Date.now()}ms.`);
+						// setToken(accessToken);
+					} else {
+						isValid().then(async (isvalid) => {
+							if (isvalid) {
+								setToken(foundToken);
+							} else {
+								SpotifyAuth.authorize(config).then(async (data) => {
 									await Toast.show({ text: 'authorized' });
 									// console.log(`Got an access token, its ${accessToken}!`);
 									// console.log(`Its going to expire in ${expiresAt - Date.now()}ms.`);
-									// setToken(accessToken);
-								}
-							});
-						}
+								});
+								// console.log(`Got an access token, its ${accessToken}!`);
+								// console.log(`Its going to expire in ${expiresAt - Date.now()}ms.`);
+								// setToken(accessToken);
+							}
+						});
 					}
+					// }
 				});
 			});
 		},
