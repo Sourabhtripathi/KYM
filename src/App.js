@@ -159,7 +159,7 @@ const App = (props) => {
 								await Toast.show(data);
 								// console.log(`Got an access token, its ${accessToken}!`);
 								// console.log(`Its going to expire in ${expiresAt - Date.now()}ms.`);
-								setToken(accessToken);
+								// setToken(accessToken);
 							});
 						} else {
 							isValid().then((isvalid) => {
@@ -170,7 +170,7 @@ const App = (props) => {
 										await Toast.show(data);
 										// console.log(`Got an access token, its ${accessToken}!`);
 										// console.log(`Its going to expire in ${expiresAt - Date.now()}ms.`);
-										setToken(accessToken);
+										// setToken(accessToken);
 									});
 								}
 							});
