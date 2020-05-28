@@ -3,8 +3,20 @@ import isEmpty from 'is-empty';
 import SpotifyWebApi from 'spotify-web-api-js';
 import FuzzySearch from 'fuzzy-search';
 import { Plugins } from '@capacitor/core';
+import { SpotifyAuth } from '@ionic-native/spotify-auth';
+import { config } from '../creds';
 const spotifyApi = new SpotifyWebApi();
-const { Storage, Browser, Device } = Plugins;
+const { Storage, Browser, Device, Toast } = Plugins;
+
+export const authorize = () => {
+	SpotifyAuth.authorize(config).then(async (data) => {
+		console.log({ text: 'authorized' });
+		await Toast.show({ text: 'authorized' });
+		console.log(data);
+		// console.log(`Got an access token, its ${accessToken}!`);
+		// console.log(`Its going to expire in ${expiresAt - Date.now()}ms.`);
+	});
+};
 
 // Device functions
 export const getDeviceInfo = async () => {

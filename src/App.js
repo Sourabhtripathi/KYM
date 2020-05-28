@@ -63,10 +63,7 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
-import { SpotifyAuth } from '@ionic-native/spotify-auth';
-import { config } from './creds';
-import { Plugins } from '@capacitor/core';
-const { Toast } = Plugins;
+
 const App = (props) => {
 	const [ timeLeft, setTimeLeft ] = useState(10);
 	const [ myself, setMyself ] = useState(false);
@@ -167,12 +164,7 @@ const App = (props) => {
 
 			if (props.auth.device === 'android' || props.auth.device === 'ios') {
 				console.log({ text: 'in android' });
-				SpotifyAuth.authorize(config).then((data) => {
-					console.log({ text: 'authorized' });
-					setToken(data.accessToken);
-					// console.log(`Got an access token, its ${accessToken}!`);
-					// console.log(`Its going to expire in ${expiresAt - Date.now()}ms.`);
-				});
+
 				// 	if (!foundToken) {
 
 				// 		// console.log(`Got an access token, its ${accessToken}!`);
