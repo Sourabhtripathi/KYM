@@ -36,7 +36,8 @@ import {
 	compareValues,
 	getRegisteredUsers,
 	getStorage,
-	getDeviceInfo
+	getDeviceInfo,
+	authorize
 } from './helpers/index.js';
 import './assets/stylesheets/App.css';
 import { IonApp, IonRouterOutlet } from '@ionic/react';
@@ -163,8 +164,32 @@ const App = (props) => {
 			}
 
 			if (props.auth.device === 'android' || props.auth.device === 'ios') {
-				console.log({ text: 'in android' });
+				console.log('in android');
+				getStorage('access_token').then((access_token) => {
+					if (access_token) {
+						isValid().then((isvalid) => {
+							if (!isvalid) {
+								authorize().then((data) => {
+									updateTokens(data).then((data) => {
+										setToken(data);
+									});
+								});
+							} else {
+								setToken(access_token);
+							}
+						});
+					} else {
+						authorize().then((data) => {
+							updateTokens(data).then((data) => {
+								setToken(data);
+							});
+						});
+					}
+				});
 				props.setUserNotLoading();
+				calculateTimeLeft().then((data) => {
+					setTimeLeft(data);
+				});
 
 				// 	if (!foundToken) {
 

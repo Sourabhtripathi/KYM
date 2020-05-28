@@ -9,13 +9,7 @@ const spotifyApi = new SpotifyWebApi();
 const { Storage, Browser, Device, Toast } = Plugins;
 
 export const authorize = () => {
-	SpotifyAuth.authorize(config).then(async (data) => {
-		console.log({ text: 'authorized' });
-		await Toast.show({ text: 'authorized' });
-		console.log(data);
-		// console.log(`Got an access token, its ${accessToken}!`);
-		// console.log(`Its going to expire in ${expiresAt - Date.now()}ms.`);
-	});
+	return SpotifyAuth.authorize(config).then((data) => data);
 };
 
 // Device functions
