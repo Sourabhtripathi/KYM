@@ -154,7 +154,7 @@ const App = (props) => {
 						}
 					}
 					if (device.platform === 'android' || device.platform === 'ios') {
-						// await Toast.show({ text: 'in android' });
+						await Toast.show({ text: 'in android' });
 						if (!foundToken) {
 							const res = await SpotifyAuth.authorize(config);
 							await Toast.show({ text: 'authorized' });
