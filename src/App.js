@@ -167,8 +167,8 @@ const App = (props) => {
 			if (props.auth.device === 'android' || props.auth.device === 'ios') {
 				console.log('in android');
 				getStorage('access_token').then((access_token) => {
-					showToast(`access token : ${access_token}`);
 					if (access_token) {
+						showToast(`access token : ${access_token}`);
 						isValid().then((isvalid) => {
 							if (!isvalid) {
 								authorize().then((data) => {
@@ -181,8 +181,10 @@ const App = (props) => {
 							}
 						});
 					} else {
+						showToast(`access token not present`);
 						authorize().then((data) => {
 							updateTokens(data).then((data) => {
+								showToast(`access token : ${data.access_token}`);
 								setToken(data);
 							});
 						});
