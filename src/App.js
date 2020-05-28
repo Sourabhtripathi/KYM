@@ -34,7 +34,8 @@ import {
 	found,
 	compareValues,
 	getRegisteredUsers,
-	getStorage
+	getStorage,
+	getDeviceInfo
 } from './helpers/index.js';
 import './assets/stylesheets/App.css';
 import { IonApp, IonRouterOutlet } from '@ionic/react';
@@ -61,6 +62,9 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import { SpotifyAuth } from '@ionic-native/spotify-auth';
+import { config } from './creds';
+import { Browser } from '@capacitor/core';
 
 const App = (props) => {
 	const [ timeLeft, setTimeLeft ] = useState(10);
@@ -100,53 +104,65 @@ const App = (props) => {
 
 	useEffect(
 		() => {
-			const params = getParams();
+			getDeviceInfo().then((device) => {
+				if (device.platform === 'web') {
+					const params = getParams();
 
-			getStorage('accessToken').then((foundToken) => {
-				console.log('got the token');
-				if (isEmpty(params)) {
-					console.log('empty');
-					if (foundToken) {
-						console.log('token exists');
-						// check if token is valid and also check if user stills exists in db
-						isValid().then((isvalid) => {
-							if (isvalid) {
-								console.log('is valid');
-								setToken(foundToken);
-								setTimeout(() => {
-									calculateTimeLeft().then((data) => {
-										setTimeLeft(data);
-									});
-								}, 1000);
-							} else {
-								console.log('is not valid');
-								// refresh the token
-								getStorage('refreshToken').then((refreshToken) => {
-									console.log(refreshToken);
-									window.open(`http://localhost:3005/refresh_token?refresh_token=${refreshToken}`);
+					getStorage('accessToken').then((foundToken) => {
+						console.log('got the token');
+						if (isEmpty(params)) {
+							console.log('empty');
+							if (foundToken) {
+								console.log('token exists');
+								// check if token is valid and also check if user stills exists in db
+								isValid().then((isvalid) => {
+									if (isvalid) {
+										console.log('is valid');
+										setToken(foundToken);
+										setTimeout(() => {
+											calculateTimeLeft().then((data) => {
+												setTimeLeft(data);
+											});
+										}, 1000);
+									} else {
+										console.log('is not valid');
+										// refresh the token
+										getStorage('refreshToken').then((refreshToken) => {
+											console.log(refreshToken);
+											window.open(
+												`http://localhost:3005/refresh_token?refresh_token=${refreshToken}`
+											);
+										});
+										setTimeout(() => {
+											calculateTimeLeft().then((data) => {
+												console.log(data);
+												setTimeLeft(data);
+											});
+										}, 1000);
+									}
 								});
-								setTimeout(() => {
-									calculateTimeLeft().then((data) => {
-										console.log(data);
-										setTimeLeft(data);
-									});
-								}, 1000);
+							} else {
+								console.log("token doesn't exist");
+								props.setUserNotLoading();
 							}
-						});
-					} else {
-						console.log("token doesn't exist");
-						props.setUserNotLoading();
-					}
-				} else {
-					console.log('not empty');
-					// returned from server
-					updateTokens(params).then((data) => {
-						setToken(data);
-						setTimeLeft(timeLeft + 1);
+						} else {
+							console.log('not empty');
+							// returned from server
+							updateTokens(params).then((data) => {
+								setToken(data);
+								setTimeLeft(timeLeft + 1);
+							});
+						}
 					});
+					console.log(timeLeft);
+				}
+				if (device.platform === 'android' || device.platform === 'ios') {
+					// SpotifyAuth.authorize(config).then(({ accessToken, expiresAt }) => {
+					// 	console.log(`Got an access token, its ${accessToken}!`);
+					// 	console.log(`Its going to expire in ${expiresAt - Date.now()}ms.`);
+					// });
 				}
 			});
-			console.log(timeLeft);
 		},
 		[ timeLeft, token ]
 	);

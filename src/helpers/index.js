@@ -4,7 +4,21 @@ import SpotifyWebApi from 'spotify-web-api-js';
 import FuzzySearch from 'fuzzy-search';
 import { Plugins } from '@capacitor/core';
 const spotifyApi = new SpotifyWebApi();
-const { Storage } = Plugins;
+const { Storage, Browser, Device } = Plugins;
+
+// Device functions
+export const getDeviceInfo = async () => {
+	return await Device.getInfo();
+};
+
+// Browser functions
+export const openBrowser = async (url) => {
+	await Browser.open({ url: url });
+};
+
+export const closeBrowser = async () => {
+	await Browser.close();
+};
 
 // Storage functions
 export const setStorage = async (key, value) => {
