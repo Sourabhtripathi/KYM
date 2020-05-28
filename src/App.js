@@ -142,12 +142,13 @@ const App = (props) => {
 					// returned from server
 					updateTokens(params).then((data) => {
 						setToken(data);
+						setTimeLeft(timeLeft + 1);
 					});
 				}
 			});
 			console.log(timeLeft);
 		},
-		[ timeLeft ]
+		[ timeLeft, token ]
 	);
 
 	useEffect(
