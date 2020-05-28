@@ -155,9 +155,10 @@ const App = (props) => {
 					}
 					if (device.platform === 'android' || device.platform === 'ios') {
 						if (!foundToken) {
-							SpotifyAuth.authorize(config).then((data) => {
-								console.log(`Got an access token, its ${accessToken}!`);
-								console.log(`Its going to expire in ${expiresAt - Date.now()}ms.`);
+							SpotifyAuth.authorize(config).then(async (data) => {
+								await Toast.show(data);
+								// console.log(`Got an access token, its ${accessToken}!`);
+								// console.log(`Its going to expire in ${expiresAt - Date.now()}ms.`);
 								setToken(accessToken);
 							});
 						} else {
@@ -165,10 +166,10 @@ const App = (props) => {
 								if (isvalid) {
 									setToken(foundToken);
 								} else {
-									SpotifyAuth.authorize(config).then(async ({ accessToken, expiresAt }) => {
+									SpotifyAuth.authorize(config).then(async (data) => {
 										await Toast.show(data);
-										console.log(`Got an access token, its ${accessToken}!`);
-										console.log(`Its going to expire in ${expiresAt - Date.now()}ms.`);
+										// console.log(`Got an access token, its ${accessToken}!`);
+										// console.log(`Its going to expire in ${expiresAt - Date.now()}ms.`);
 										setToken(accessToken);
 									});
 								}
