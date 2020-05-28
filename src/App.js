@@ -164,6 +164,7 @@ const App = (props) => {
 
 			if (props.auth.device === 'android' || props.auth.device === 'ios') {
 				console.log({ text: 'in android' });
+				props.setUserNotLoading();
 
 				// 	if (!foundToken) {
 
