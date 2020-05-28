@@ -6,7 +6,8 @@ import { authorize } from '../helpers';
 
 const Landing = (props) => {
 	const onAuthClick = () => {
-		authorize();
+		// authorize().then()
+		console.log('clicked');
 	};
 
 	const renderLoginButton = () => {
