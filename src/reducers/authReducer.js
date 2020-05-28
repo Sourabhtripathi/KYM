@@ -1,12 +1,18 @@
 import { SET_CURRENT_USER, USER_NOT_LOADING } from '../actions/types';
 const isEmpty = require('is-empty');
 const initialState = {
+	device: null,
 	isAuthenticated: false,
 	user: {},
 	loading: true
 };
 export default function(state = initialState, action) {
 	switch (action.type) {
+		case SET_DEVICE:
+			return {
+				...state,
+				device: action.payload
+			};
 		case SET_CURRENT_USER:
 			return {
 				...state,

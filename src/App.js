@@ -6,7 +6,8 @@ import {
 	setMyTopTracks,
 	setMyPlaylists,
 	setOpenPlaylists,
-	setRegisteredUsers
+	setRegisteredUsers,
+	setDevice
 } from './actions';
 import history from './history';
 import { connect } from 'react-redux';
@@ -73,6 +74,15 @@ const App = (props) => {
 
 	useEffect(
 		() => {
+			getDeviceInfo().then((device) => {
+				props.setDevice(device.platform);
+			});
+		},
+		[ props.auth.device ]
+	);
+
+	useEffect(
+		() => {
 			if (props.auth.isAuthenticated) {
 				getMyTopTracks(props.auth.user.id).then((data) => {
 					props.setMyTopTracks(data);
@@ -104,86 +114,87 @@ const App = (props) => {
 
 	useEffect(
 		() => {
-			getDeviceInfo().then((device) => {
-				getStorage('accessToken').then(async (foundToken) => {
-					if (device.platform === 'web') {
-						const params = getParams();
-						console.log('got the token');
-						if (isEmpty(params)) {
-							console.log('empty');
-							if (foundToken) {
-								console.log('token exists');
-								// check if token is valid and also check if user stills exists in db
-								isValid().then((isvalid) => {
-									if (isvalid) {
-										console.log('is valid');
-										setToken(foundToken);
-										setTimeout(() => {
-											calculateTimeLeft().then((data) => {
-												setTimeLeft(data);
-											});
-										}, 1000);
-									} else {
-										console.log('is not valid');
-										// refresh the token
-										getStorage('refreshToken').then((refreshToken) => {
-											console.log(refreshToken);
-											window.open(
-												`http://localhost:3005/refresh_token?refresh_token=${refreshToken}`
-											);
+			if (props.auth.device === 'web') {
+				getStorage('access_token').then((foundToken) => {
+					const params = getParams();
+					console.log('got the token');
+					if (isEmpty(params)) {
+						console.log('empty');
+						if (foundToken) {
+							console.log('token exists');
+							// check if token is valid and also check if user stills exists in db
+							isValid().then((isvalid) => {
+								if (isvalid) {
+									console.log('is valid');
+									setToken(foundToken);
+									setTimeout(() => {
+										calculateTimeLeft().then((data) => {
+											setTimeLeft(data);
 										});
-										setTimeout(() => {
-											calculateTimeLeft().then((data) => {
-												console.log(data);
-												setTimeLeft(data);
-											});
-										}, 1000);
-									}
-								});
-							} else {
-								console.log("token doesn't exist");
-								props.setUserNotLoading();
-							}
-						} else {
-							console.log('not empty');
-							// returned from server
-							updateTokens(params).then((data) => {
-								setToken(data);
-								setTimeLeft(timeLeft + 1);
+									}, 1000);
+								} else {
+									console.log('is not valid');
+									// refresh the token
+									getStorage('refresh_token').then((refresh_token) => {
+										console.log(refresh_token);
+										window.open(
+											`http://localhost:3005/refresh_token?refresh_token=${refresh_token}`
+										);
+									});
+									setTimeout(() => {
+										calculateTimeLeft().then((data) => {
+											console.log(data);
+											setTimeLeft(data);
+										});
+									}, 1000);
+								}
 							});
+						} else {
+							console.log("token doesn't exist");
+							props.setUserNotLoading();
 						}
-					}
-					// if (device.platform === 'android' || device.platform === 'ios') {
-					await Toast.show({ text: 'in android' });
-					if (!foundToken) {
-						SpotifyAuth.authorize(config).then(async (data) => {
-							await Toast.show({ text: 'authorized' });
-							// console.log(`Got an access token, its ${accessToken}!`);
-							// console.log(`Its going to expire in ${expiresAt - Date.now()}ms.`);
-						});
-
-						// console.log(`Got an access token, its ${accessToken}!`);
-						// console.log(`Its going to expire in ${expiresAt - Date.now()}ms.`);
-						// setToken(accessToken);
 					} else {
-						isValid().then(async (isvalid) => {
-							if (isvalid) {
-								setToken(foundToken);
-							} else {
-								SpotifyAuth.authorize(config).then(async (data) => {
-									await Toast.show({ text: 'authorized' });
-									// console.log(`Got an access token, its ${accessToken}!`);
-									// console.log(`Its going to expire in ${expiresAt - Date.now()}ms.`);
-								});
-								// console.log(`Got an access token, its ${accessToken}!`);
-								// console.log(`Its going to expire in ${expiresAt - Date.now()}ms.`);
-								// setToken(accessToken);
-							}
+						console.log('not empty');
+						// returned from server
+						updateTokens(params).then((data) => {
+							setToken(data);
+							setTimeLeft(timeLeft + 1);
 						});
 					}
-					// }
 				});
-			});
+			}
+
+			if (props.auth.device === 'android' || props.auth.device === 'ios') {
+				console.log({ text: 'in android' });
+				SpotifyAuth.authorize(config).then((data) => {
+					console.log({ text: 'authorized' });
+					setToken(data.accessToken);
+					// console.log(`Got an access token, its ${accessToken}!`);
+					// console.log(`Its going to expire in ${expiresAt - Date.now()}ms.`);
+				});
+				// 	if (!foundToken) {
+
+				// 		// console.log(`Got an access token, its ${accessToken}!`);
+				// 		// console.log(`Its going to expire in ${expiresAt - Date.now()}ms.`);
+				// 		// setToken(accessToken);
+				// 	} else {
+				// 		isValid().then((isvalid) => {
+				// 			if (isvalid) {
+				// 				setToken(foundToken);
+				// 			} else {
+				// 				SpotifyAuth.authorize(config).then((data) => {
+				// 					console.log({ text: 'authorized' });
+				// 					console.log(data);
+				// 					// console.log(`Got an access token, its ${accessToken}!`);
+				// 					// console.log(`Its going to expire in ${expiresAt - Date.now()}ms.`);
+				// 				});
+				// 				// console.log(`Got an access token, its ${accessToken}!`);
+				// 				// console.log(`Its going to expire in ${expiresAt - Date.now()}ms.`);
+				// 				// setToken(accessToken);
+				// 			}
+				// 		});
+				// 	}
+			}
 		},
 		[ timeLeft, token ]
 	);
@@ -193,6 +204,7 @@ const App = (props) => {
 			if (token) {
 				setAccessToken(token);
 				setMe().then((data) => {
+					console.log('setting me');
 					props.loginUser(data);
 					props.setUserNotLoading();
 				});
@@ -252,5 +264,6 @@ export default connect(mapStateToProps, {
 	setMyTopTracks,
 	setMyPlaylists,
 	setOpenPlaylists,
-	setRegisteredUsers
+	setRegisteredUsers,
+	setDevice
 })(App);

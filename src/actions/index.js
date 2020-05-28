@@ -14,6 +14,11 @@ import {
 } from './types';
 import { removeStorage } from '../helpers';
 
+// set Device
+export const setDevice = (data) => (dispatch) => {
+	dispatch({ type: SET_DEVICE, payload: data });
+};
+
 // set Registered Users
 export const setRegisteredUsers = (data) => (dispatch) => {
 	dispatch({ type: SET_REGISTERED_USERS, payload: data });

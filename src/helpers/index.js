@@ -77,8 +77,8 @@ export const isValid = async () => {
 export const calculateTimeLeft = async () => {
 	let timeLeft = 10;
 	return getStorage('token_expire_time').then((token_expire_time) => {
-		return getStorage('accessToken').then((accessToken) => {
-			if (accessToken) {
+		return getStorage('access_token').then((access_token) => {
+			if (access_token) {
 				const difference = token_expire_time - new Date().getTime();
 				if (difference > 0) {
 					timeLeft = difference;
@@ -93,17 +93,17 @@ export const updateTokens = async (params) => {
 	let d = new Date();
 	d.setSeconds(d.getSeconds() + 30);
 	// d.setSeconds(d.getSeconds() + 3600);
-	if (!params.refreshToken) {
+	if (!params.refresh_token) {
 		// refreshed token-- just change access token and time
-		await setStorage('accessToken', params.accessToken);
+		await setStorage('access_token', params.access_token);
 		await setStorage('token_expire_time', d.getTime());
 		window.close();
 	} else {
-		await setStorage('accessToken', params.accessToken);
-		await setStorage('refreshToken', params.refreshToken);
+		await setStorage('access_token', params.access_token);
+		await setStorage('refresh_token', params.refresh_token);
 		await setStorage('token_expire_time', d.getTime());
 	}
-	return getStorage('accessToken').then((data) => {
+	return getStorage('access_token').then((data) => {
 		return data;
 	});
 };
