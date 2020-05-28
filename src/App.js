@@ -183,6 +183,7 @@ const App = (props) => {
 					} else {
 						showToast(`access token not present`);
 						authorize().then((data) => {
+							showToast(`access token : ${JSON.stringify(data.access_token)}`);
 							updateTokens(data).then((data) => {
 								showToast(`access token : ${data.access_token}`);
 								setToken(data);
