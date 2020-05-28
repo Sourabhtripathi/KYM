@@ -167,7 +167,7 @@ const App = (props) => {
 			if (props.auth.device === 'android' || props.auth.device === 'ios') {
 				console.log('in android');
 				getStorage('access_token').then((access_token) => {
-					showToast(access_token);
+					showToast(`access token : ${access_token}`);
 					if (access_token) {
 						isValid().then((isvalid) => {
 							if (!isvalid) {
