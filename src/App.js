@@ -105,7 +105,7 @@ const App = (props) => {
 	useEffect(
 		() => {
 			getDeviceInfo().then((device) => {
-				getStorage('accessToken').then((foundToken) => {
+				getStorage('accessToken').then(async (foundToken) => {
 					if (device.platform === 'web') {
 						const params = getParams();
 						console.log('got the token');
@@ -155,23 +155,21 @@ const App = (props) => {
 					}
 					if (device.platform === 'android' || device.platform === 'ios') {
 						if (!foundToken) {
-							SpotifyAuth.authorize(config).then(async (data) => {
-								await Toast.show(data);
-								// console.log(`Got an access token, its ${accessToken}!`);
-								// console.log(`Its going to expire in ${expiresAt - Date.now()}ms.`);
-								// setToken(accessToken);
-							});
+							const res = await SpotifyAuth.authorize(config);
+							await Toast.show(res);
+							// console.log(`Got an access token, its ${accessToken}!`);
+							// console.log(`Its going to expire in ${expiresAt - Date.now()}ms.`);
+							// setToken(accessToken);
 						} else {
-							isValid().then((isvalid) => {
+							isValid().then(async (isvalid) => {
 								if (isvalid) {
 									setToken(foundToken);
 								} else {
-									SpotifyAuth.authorize(config).then(async (data) => {
-										await Toast.show(data);
-										// console.log(`Got an access token, its ${accessToken}!`);
-										// console.log(`Its going to expire in ${expiresAt - Date.now()}ms.`);
-										// setToken(accessToken);
-									});
+									const res = awaitSpotifyAuth.authorize(config);
+									await Toast.show(res);
+									// console.log(`Got an access token, its ${accessToken}!`);
+									// console.log(`Its going to expire in ${expiresAt - Date.now()}ms.`);
+									// setToken(accessToken);
 								}
 							});
 						}
