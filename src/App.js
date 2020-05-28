@@ -105,10 +105,9 @@ const App = (props) => {
 	useEffect(
 		() => {
 			getDeviceInfo().then((device) => {
-				if (device.platform === 'web') {
-					const params = getParams();
-
-					getStorage('accessToken').then((foundToken) => {
+				getStorage('accessToken').then((foundToken) => {
+					if (device.platform === 'web') {
+						const params = getParams();
 						console.log('got the token');
 						if (isEmpty(params)) {
 							console.log('empty');
@@ -153,15 +152,29 @@ const App = (props) => {
 								setTimeLeft(timeLeft + 1);
 							});
 						}
-					});
-					console.log(timeLeft);
-				}
-				if (device.platform === 'android' || device.platform === 'ios') {
-					// SpotifyAuth.authorize(config).then(({ accessToken, expiresAt }) => {
-					// 	console.log(`Got an access token, its ${accessToken}!`);
-					// 	console.log(`Its going to expire in ${expiresAt - Date.now()}ms.`);
-					// });
-				}
+					}
+					if (device.platform === 'android' || device.platform === 'ios') {
+						if (!foundToken) {
+							SpotifyAuth.authorize(config).then(({ accessToken, expiresAt }) => {
+								console.log(`Got an access token, its ${accessToken}!`);
+								console.log(`Its going to expire in ${expiresAt - Date.now()}ms.`);
+								setToken(accessToken);
+							});
+						} else {
+							isValid().then((isvalid) => {
+								if (isvalid) {
+									setToken(foundToken);
+								} else {
+									SpotifyAuth.authorize(config).then(({ accessToken, expiresAt }) => {
+										console.log(`Got an access token, its ${accessToken}!`);
+										console.log(`Its going to expire in ${expiresAt - Date.now()}ms.`);
+										setToken(accessToken);
+									});
+								}
+							});
+						}
+					}
+				});
 			});
 		},
 		[ timeLeft, token ]
