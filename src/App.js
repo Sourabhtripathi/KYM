@@ -165,7 +165,7 @@ const App = (props) => {
 								if (isvalid) {
 									setToken(foundToken);
 								} else {
-									const res = awaitSpotifyAuth.authorize(config);
+									const res = await SpotifyAuth.authorize(config);
 									await Toast.show(res);
 									// console.log(`Got an access token, its ${accessToken}!`);
 									// console.log(`Its going to expire in ${expiresAt - Date.now()}ms.`);
