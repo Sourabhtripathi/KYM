@@ -85,8 +85,8 @@ export const loginUser = (id) => (dispatch) => {
 
 // Log user out
 export const logoutUser = () => async (dispatch) => {
-	await removeStorage('accessToken');
-	await removeStorage('refreshToken');
+	await removeStorage('access_token');
+	await removeStorage('refresh_token');
 	await removeStorage('token_expire_time');
 	dispatch({ type: SET_CURRENT_USER, payload: null });
 };
