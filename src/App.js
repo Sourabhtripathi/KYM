@@ -37,7 +37,8 @@ import {
 	getRegisteredUsers,
 	getStorage,
 	getDeviceInfo,
-	authorize
+	authorize,
+	showToast
 } from './helpers/index.js';
 import './assets/stylesheets/App.css';
 import { IonApp, IonRouterOutlet } from '@ionic/react';
@@ -166,6 +167,7 @@ const App = (props) => {
 			if (props.auth.device === 'android' || props.auth.device === 'ios') {
 				console.log('in android');
 				getStorage('access_token').then((access_token) => {
+					showToast(access_token);
 					if (access_token) {
 						isValid().then((isvalid) => {
 							if (!isvalid) {

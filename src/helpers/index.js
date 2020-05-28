@@ -12,6 +12,11 @@ export const authorize = () => {
 	return SpotifyAuth.authorize(config).then((data) => data);
 };
 
+// Toast
+export const showToast = async (text) => {
+	await Toast.show({ text: text });
+};
+
 // Device functions
 export const getDeviceInfo = async () => {
 	return await Device.getInfo();
