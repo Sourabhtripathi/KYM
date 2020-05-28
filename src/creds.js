@@ -22,6 +22,8 @@ export const config = {
 		'user-follow-read',
 		'user-follow-modify'
 	],
-	tokenExchangeUrl: 'http://localhost:3005/login',
-	tokenRefreshUrl: 'http://localhost:3005/refresh_token'
+	// tokenExchangeUrl: 'http://localhost:3005/login',
+	tokenExchangeUrl: 'https://kymserver.herokuapp.com/login',
+	// tokenRefreshUrl: 'http://localhost:3005/refresh_token',
+	tokenRefreshUrl: 'https://kymserver.herokuapp.com/refresh_token'
 };

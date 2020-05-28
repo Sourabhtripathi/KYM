@@ -185,8 +185,7 @@ const App = (props) => {
 		() => {
 			if (token) {
 				setAccessToken(token);
-				setMe().then(async (data) => {
-					await Toast.show({ text: 'setting me' });
+				setMe().then((data) => {
 					props.loginUser(data);
 					props.setUserNotLoading();
 				});
