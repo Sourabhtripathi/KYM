@@ -154,10 +154,10 @@ const App = (props) => {
 						}
 					}
 					if (device.platform === 'android' || device.platform === 'ios') {
-						await Toast.show('in sndroid');
+						await Toast.show({ text: 'in android' });
 						if (!foundToken) {
 							const res = await SpotifyAuth.authorize(config);
-							await Toast.show('authorized');
+							await Toast.show({ text: 'authorized' });
 							// console.log(`Got an access token, its ${accessToken}!`);
 							// console.log(`Its going to expire in ${expiresAt - Date.now()}ms.`);
 							// setToken(accessToken);
@@ -167,7 +167,7 @@ const App = (props) => {
 									setToken(foundToken);
 								} else {
 									const res = await SpotifyAuth.authorize(config);
-									await Toast.show('authorized');
+									await Toast.show({ text: 'authorized' });
 									// console.log(`Got an access token, its ${accessToken}!`);
 									// console.log(`Its going to expire in ${expiresAt - Date.now()}ms.`);
 									// setToken(accessToken);
