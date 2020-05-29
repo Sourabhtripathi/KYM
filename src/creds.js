@@ -1,6 +1,6 @@
 export const config = {
 	clientId: '549a4d6816834a4aa17ed83775760755',
-	redirectUrl: 'https://knowyourmusic.netlify.app/callback',
+	redirectUrl: 'https://knowyourmusic.netlify.app',
 	scopes: [
 		'ugc-image-upload',
 		'user-read-playback-state',

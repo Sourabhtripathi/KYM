@@ -17,11 +17,6 @@ class App extends Component {
 
 	componentDidUpdate() {
 		console.log('app updated');
-		setTimeout(() => {
-			this.setState({
-				val: this.state.val + 1
-			});
-		}, 1000);
 	}
 
 	render() {

@@ -11,11 +11,11 @@ const Landing = (props) => {
 	};
 
 	const renderLoginButton = () => {
-		if (props.device === 'web') {
-			return <a href={`${serverUrl}/login`}>Login with Spotify</a>;
-		} else {
-			return <button onClick={onAuthClick}>Native Auth</button>;
-		}
+		// if (props.device === 'web') {
+		return <a href={`${serverUrl}/login`}>Login with Spotify</a>;
+		// } else {
+		// return <button onClick={onAuthClick}>Native Auth</button>;
+		// }
 	};
 
 	return (

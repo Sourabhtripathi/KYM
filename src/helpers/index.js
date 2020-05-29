@@ -9,7 +9,10 @@ const spotifyApi = new SpotifyWebApi();
 const { Storage, Browser, Device, Toast } = Plugins;
 
 export const authorize = () => {
-	return SpotifyAuth.authorize(config).then((data) => data);
+	return SpotifyAuth.authorize(config).then((data) => {
+		console.log(data);
+		return data;
+	});
 };
 
 // Toast
@@ -102,7 +105,7 @@ export const calculateTimeLeft = async () => {
 
 export const updateTokens = async (params) => {
 	let d = new Date();
-	d.setSeconds(d.getSeconds() + 30);
+	d.setSeconds(d.getSeconds() + 3600);
 	// d.setSeconds(d.getSeconds() + 3600);
 	if (!params.refresh_token) {
 		// refreshed token-- just change access token and time

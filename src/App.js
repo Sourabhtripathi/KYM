@@ -114,111 +114,110 @@ const App = (props) => {
 
 	useEffect(
 		() => {
-			if (props.auth.device === 'web') {
-				getStorage('access_token').then((foundToken) => {
-					const params = getParams();
-					console.log('got the token');
-					if (isEmpty(params)) {
-						console.log('empty');
-						if (foundToken) {
-							console.log('token exists');
-							// check if token is valid and also check if user stills exists in db
-							isValid().then((isvalid) => {
-								if (isvalid) {
-									console.log('is valid');
-									setToken(foundToken);
-									setTimeout(() => {
-										calculateTimeLeft().then((data) => {
-											setTimeLeft(data);
-										});
-									}, 1000);
-								} else {
-									console.log('is not valid');
-									// refresh the token
-									getStorage('refresh_token').then((refresh_token) => {
-										console.log(refresh_token);
-										window.open(
-											`http://localhost:3005/refresh_token?refresh_token=${refresh_token}`
-										);
-									});
-									setTimeout(() => {
-										calculateTimeLeft().then((data) => {
-											console.log(data);
-											setTimeLeft(data);
-										});
-									}, 1000);
-								}
-							});
-						} else {
-							console.log("token doesn't exist");
-							props.setUserNotLoading();
-						}
-					} else {
-						console.log('not empty');
-						// returned from server
-						updateTokens(params).then((data) => {
-							setToken(data);
-							setTimeLeft(timeLeft + 1);
-						});
-					}
-				});
-			}
-
-			if (props.auth.device === 'android' || props.auth.device === 'ios') {
-				console.log('in android');
-				getStorage('access_token').then((access_token) => {
-					if (access_token) {
-						showToast(`access token : ${access_token}`);
+			// if (props.auth.device === 'web') {
+			console.log('checking for params');
+			getStorage('access_token').then((foundToken) => {
+				const params = getParams();
+				console.log('got the token');
+				if (isEmpty(params)) {
+					console.log('empty');
+					if (foundToken) {
+						console.log('token exists');
+						// check if token is valid and also check if user stills exists in db
 						isValid().then((isvalid) => {
-							if (!isvalid) {
-								authorize().then((data) => {
-									updateTokens(data).then((data) => {
-										setToken(data);
+							if (isvalid) {
+								console.log('is valid');
+								setToken(foundToken);
+								setTimeout(() => {
+									calculateTimeLeft().then((data) => {
+										setTimeLeft(data);
 									});
-								});
+								}, 1000);
 							} else {
-								setToken(access_token);
+								console.log('is not valid');
+								// refresh the token
+								getStorage('refresh_token').then((refresh_token) => {
+									console.log(refresh_token);
+									window.open(`http://localhost:3005/refresh_token?refresh_token=${refresh_token}`);
+								});
+								setTimeout(() => {
+									calculateTimeLeft().then((data) => {
+										console.log(data);
+										setTimeLeft(data);
+									});
+								}, 1000);
 							}
 						});
 					} else {
-						showToast(`access token not present`);
-						authorize().then((data) => {
-							showToast(`access token : ${JSON.stringify(data.access_token)}`);
-							updateTokens(data).then((data) => {
-								showToast(`access token : ${data.access_token}`);
-								setToken(data);
-							});
-						});
+						console.log("token doesn't exist");
+						props.setUserNotLoading();
 					}
-				});
-				props.setUserNotLoading();
-				calculateTimeLeft().then((data) => {
-					setTimeLeft(data);
-				});
+				} else {
+					console.log('not empty');
+					// returned from server
+					updateTokens(params).then((data) => {
+						setToken(data);
+						setTimeLeft(timeLeft + 1);
+					});
+				}
+			});
+			// }
 
-				// 	if (!foundToken) {
+			// if (props.auth.device === 'android' || props.auth.device === 'ios') {
+			// 	console.log('in android');
+			// 	getStorage('access_token').then((access_token) => {
+			// 		if (access_token) {
+			// 			showToast(`access token : ${access_token}`);
+			// 			isValid().then((isvalid) => {
+			// 				if (!isvalid) {
+			// 					authorize().then((data) => {
+			// 						updateTokens(data).then((data) => {
+			// 							setToken(data);
+			// 						});
+			// 					});
+			// 				} else {
+			// 					setToken(access_token);
+			// 				}
+			// 			});
+			// 		} else {
+			// 			showToast(`access token not present`);
+			// 			authorize().then((data) => {
+			// 				showToast(`access token : ${JSON.stringify(data.access_token)}`);
+			// 				updateTokens(data).then((data) => {
+			// 					showToast(`access token : ${data.access_token}`);
+			// 					setToken(data);
+			// 				});
+			// 			});
+			// 		}
+			// 	});
+			// 	props.setUserNotLoading();
+			// 	calculateTimeLeft().then((data) => {
+			// 		setTimeLeft(data);
+			// 	});
 
-				// 		// console.log(`Got an access token, its ${accessToken}!`);
-				// 		// console.log(`Its going to expire in ${expiresAt - Date.now()}ms.`);
-				// 		// setToken(accessToken);
-				// 	} else {
-				// 		isValid().then((isvalid) => {
-				// 			if (isvalid) {
-				// 				setToken(foundToken);
-				// 			} else {
-				// 				SpotifyAuth.authorize(config).then((data) => {
-				// 					console.log({ text: 'authorized' });
-				// 					console.log(data);
-				// 					// console.log(`Got an access token, its ${accessToken}!`);
-				// 					// console.log(`Its going to expire in ${expiresAt - Date.now()}ms.`);
-				// 				});
-				// 				// console.log(`Got an access token, its ${accessToken}!`);
-				// 				// console.log(`Its going to expire in ${expiresAt - Date.now()}ms.`);
-				// 				// setToken(accessToken);
-				// 			}
-				// 		});
-				// 	}
-			}
+			// 	// 	if (!foundToken) {
+
+			// 	// 		// console.log(`Got an access token, its ${accessToken}!`);
+			// 	// 		// console.log(`Its going to expire in ${expiresAt - Date.now()}ms.`);
+			// 	// 		// setToken(accessToken);
+			// 	// 	} else {
+			// 	// 		isValid().then((isvalid) => {
+			// 	// 			if (isvalid) {
+			// 	// 				setToken(foundToken);
+			// 	// 			} else {
+			// 	// 				SpotifyAuth.authorize(config).then((data) => {
+			// 	// 					console.log({ text: 'authorized' });
+			// 	// 					console.log(data);
+			// 	// 					// console.log(`Got an access token, its ${accessToken}!`);
+			// 	// 					// console.log(`Its going to expire in ${expiresAt - Date.now()}ms.`);
+			// 	// 				});
+			// 	// 				// console.log(`Got an access token, its ${accessToken}!`);
+			// 	// 				// console.log(`Its going to expire in ${expiresAt - Date.now()}ms.`);
+			// 	// 				// setToken(accessToken);
+			// 	// 			}
+			// 	// 		});
+			// 	// 	}
+			// }
 		},
 		[ props.auth.device, timeLeft, token ]
 	);
