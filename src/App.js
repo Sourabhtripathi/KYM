@@ -38,11 +38,14 @@ import {
 	getStorage,
 	getDeviceInfo,
 	authorize,
-	showToast
+	showToast,
+	urlOpenListener
 } from './helpers/index.js';
+
 import './assets/stylesheets/App.css';
 import { IonApp, IonRouterOutlet } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
+import { clientUrl } from './variables';
 
 // importing bootstrap
 // import 'bootstrap/dist/css/bootstrap.min.css';
@@ -65,11 +68,25 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import { Plugins, AppState } from '@capacitor/core';
 
 const App = (props) => {
 	const [ timeLeft, setTimeLeft ] = useState(10);
 	const [ myself, setMyself ] = useState(false);
 	const [ token, setToken ] = useState(null);
+	const [ nativeState, setNativeState ] = useState(0);
+
+	Plugins.App.addListener('appUrlOpen', (data) => {
+		const hash = data.url.split('#')[1];
+		const params = getParams('#' + hash);
+
+		if (params.refresh_token) {
+			updateTokens(params).then((data) => {
+				setToken(data);
+				setTimeLeft(timeLeft + 1);
+			});
+		}
+	});
 
 	useEffect(
 		() => {
@@ -115,10 +132,13 @@ const App = (props) => {
 	useEffect(
 		() => {
 			// if (props.auth.device === 'web') {
+
 			console.log('checking for params');
 			getStorage('access_token').then((foundToken) => {
-				const params = getParams();
+				console.log(window.location.hash);
+				const params = getParams(window.location.hash);
 				console.log('got the token');
+				console.log(JSON.stringify(params));
 				if (isEmpty(params)) {
 					console.log('empty');
 					if (foundToken) {
@@ -138,7 +158,7 @@ const App = (props) => {
 								// refresh the token
 								getStorage('refresh_token').then((refresh_token) => {
 									console.log(refresh_token);
-									window.open(`http://localhost:3005/refresh_token?refresh_token=${refresh_token}`);
+									window.open(`${clientUrl}/refresh_token?refresh_token=${refresh_token}`);
 								});
 								setTimeout(() => {
 									calculateTimeLeft().then((data) => {

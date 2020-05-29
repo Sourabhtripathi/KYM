@@ -1,9 +1,7 @@
 import React, { useEffect } from 'react';
-
 const AppUrlListener = (props) => {
 	useEffect(() => {
-		const slug = window.location.pathname;
-		console.log(slug);
+		// urlOpenListener();
 	}, []);
 
 	return null;

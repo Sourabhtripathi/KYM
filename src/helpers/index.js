@@ -6,11 +6,19 @@ import { Plugins } from '@capacitor/core';
 import { SpotifyAuth } from '@ionic-native/spotify-auth';
 import { config } from '../creds';
 const spotifyApi = new SpotifyWebApi();
-const { Storage, Browser, Device, Toast } = Plugins;
+const { Storage, Browser, Device, Toast, App } = Plugins;
 
 export const authorize = () => {
 	return SpotifyAuth.authorize(config).then((data) => {
-		console.log(data);
+		console.log('Data: ' + JSON.stringify(data));
+		return data;
+	});
+};
+
+// App
+export const urlOpenListener = async () => {
+	App.addListener('appUrlOpen', (data) => {
+		console.log(JSON.stringify(data.url));
 		return data;
 	});
 };
@@ -59,11 +67,11 @@ export const setMe = () => {
 	});
 };
 
-export const getParams = () => {
-	if (isEmpty(window.location.hash)) {
+export const getParams = (url) => {
+	if (isEmpty(url)) {
 		return {};
 	}
-	const str = window.location.hash.substring(1);
+	const str = url.substring(1);
 	let pieces = str.split('&'),
 		data = {},
 		i,

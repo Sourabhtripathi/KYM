@@ -11,16 +11,13 @@ class Child extends Component {
 	}
 
 	onClick = () => {
-		console.log('clicked authorization');
 		authorize()
 			.then((data) => {
 				console.log(data);
 			})
 			.catch((err) => {
-				console.log('promise error manual');
 				console.log(err);
 			});
-		console.log('passed authorization');
 	};
 
 	render() {
