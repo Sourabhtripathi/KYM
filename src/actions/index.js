@@ -1,6 +1,7 @@
 import {
 	SET_CURRENT_USER,
 	USER_NOT_LOADING,
+	USER_LOADING,
 	SET_TOP_TRACKS,
 	SET_MY_PLAYLISTS,
 	SET_OPEN_PLAYLISTS,
@@ -74,6 +75,14 @@ export const removeFromOpenPlaylists = (i) => (dispatch) => {
 export const setUserNotLoading = () => (dispatch) => {
 	dispatch({
 		type: USER_NOT_LOADING,
+		payload: null
+	});
+};
+
+// User Loading
+export const setUserLoading = () => (dispatch) => {
+	dispatch({
+		type: USER_LOADING,
 		payload: null
 	});
 };

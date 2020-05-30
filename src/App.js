@@ -7,7 +7,8 @@ import {
 	setMyPlaylists,
 	setOpenPlaylists,
 	setRegisteredUsers,
-	setDevice
+	setDevice,
+	setUserLoading
 } from './actions';
 import history from './history';
 import { connect } from 'react-redux';
@@ -73,6 +74,7 @@ const App = (props) => {
 	const [ params, setParams ] = useState(null);
 
 	Plugins.App.addListener('appUrlOpen', (data) => {
+		props.setUserLoading();
 		const hash = data.url.split('#')[1];
 		console.log('checking for native params');
 		const par = getParams('#' + hash);
@@ -244,6 +246,7 @@ const mapStateToProps = (state) => ({
 });
 export default connect(mapStateToProps, {
 	loginUser,
+	setUserLoading,
 	setUserNotLoading,
 	setMyTopTracks,
 	setMyPlaylists,
