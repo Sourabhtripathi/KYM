@@ -3,22 +3,13 @@ import isEmpty from 'is-empty';
 import SpotifyWebApi from 'spotify-web-api-js';
 import FuzzySearch from 'fuzzy-search';
 import { Plugins } from '@capacitor/core';
-import { SpotifyAuth } from '@ionic-native/spotify-auth';
-import { config } from '../creds';
 const spotifyApi = new SpotifyWebApi();
 const { Storage, Browser, Device, Toast, App } = Plugins;
 
-export const authorize = () => {
-	return SpotifyAuth.authorize(config).then((data) => {
-		console.log('Data: ' + JSON.stringify(data));
-		return data;
-	});
-};
-
 // App
-export const urlOpenListener = async () => {
+export const urlOpenListener = () => {
 	App.addListener('appUrlOpen', (data) => {
-		console.log(JSON.stringify(data.url));
+		// console.log(JSON.stringify(data.url));
 		return data;
 	});
 };
