@@ -45,7 +45,7 @@ import {
 import './assets/stylesheets/App.css';
 import { IonApp, IonRouterOutlet } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { clientUrl } from './variables';
+import { serverUrl } from './variables';
 
 // importing bootstrap
 // import 'bootstrap/dist/css/bootstrap.min.css';
@@ -158,7 +158,7 @@ const App = (props) => {
 								// refresh the token
 								getStorage('refresh_token').then((refresh_token) => {
 									console.log(refresh_token);
-									window.open(`${clientUrl}/refresh_token?refresh_token=${refresh_token}`);
+									window.open(`${serverUrl}/refresh_token?refresh_token=${refresh_token}`);
 								});
 								setTimeout(() => {
 									calculateTimeLeft().then((data) => {
