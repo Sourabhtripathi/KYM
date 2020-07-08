@@ -3,6 +3,7 @@
 	"version": "0.1.0",
 	"private": true,
 	"dependencies": {
+		"@byteowls/capacitor-oauth2": "2.0.0",
 		"@capacitor/android": "^2.1.0",
 		"@capacitor/cli": "^2.1.0",
 		"@capacitor/core": "^2.1.0",
@@ -16,6 +17,7 @@
 		"axios": "^0.19.2",
 		"classnames": "^2.2.6",
 		"cordova-spotify-oauth": "^0.1.13",
+		"emotion": "^10.0.27",
 		"es6-promise-plugin": "^4.2.2",
 		"fuzzy-search": "^3.2.1",
 		"is-empty": "^1.2.0",
@@ -23,6 +25,7 @@
 		"react": "^16.13.1",
 		"react-dom": "^16.13.1",
 		"react-redux": "^7.2.0",
+		"react-router": "^5.2.0",
 		"react-router-dom": "^5.1.2",
 		"react-scripts": "3.4.1",
 		"redux": "^4.0.5",

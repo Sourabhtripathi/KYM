@@ -1,6 +1,7 @@
+import { serverUrl, clientUrl } from './variables';
 export const config = {
 	clientId: '549a4d6816834a4aa17ed83775760755',
-	redirectUrl: 'https://knowyourmusic.netlify.app',
+	redirectUrl: `clientUrl`,
 	scopes: [
 		'ugc-image-upload',
 		'user-read-playback-state',
@@ -22,8 +23,6 @@ export const config = {
 		'user-follow-read',
 		'user-follow-modify'
 	],
-	// tokenExchangeUrl: 'http://localhost:3005/login',
-	tokenExchangeUrl: 'https://kymserver.herokuapp.com/exchange',
-	// tokenRefreshUrl: 'http://localhost:3005/refresh_token',
-	tokenRefreshUrl: 'https://kymserver.herokuapp.com/refresh'
+	tokenExchangeUrl: `${serverUrl}/exchange`,
+	tokenRefreshUrl: `${serverUrl}/refresh`
 };

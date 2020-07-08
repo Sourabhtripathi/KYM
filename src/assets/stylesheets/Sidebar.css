@@ -1,0 +1,13 @@
+.nav-link {
+	text-decoration: none;
+}
+
+.nav-card {
+	margin: 10%;
+	height: 100px;
+	text-align: center;
+}
+
+.cardContent {
+	margin-top: 10%;
+}

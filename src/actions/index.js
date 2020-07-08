@@ -33,6 +33,7 @@ export const setMyTopTracks = (data) => (dispatch) => {
 
 // set User's Playlists
 export const setMyPlaylists = (data) => (dispatch) => {
+	console.log('data');
 	dispatch({ type: SET_MY_PLAYLISTS, payload: data });
 };
 

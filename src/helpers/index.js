@@ -111,6 +111,7 @@ export const updateTokens = async (params) => {
 		await setStorage('access_token', params.access_token);
 		await setStorage('token_expire_time', d.getTime());
 		window.close();
+		// closeBrowser();
 	} else {
 		await setStorage('access_token', params.access_token);
 		await setStorage('refresh_token', params.refresh_token);

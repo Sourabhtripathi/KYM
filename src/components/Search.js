@@ -15,7 +15,6 @@ const Search = () => {
 	return (
 		<IonContent>
 			<form onSubmit={onSubmit}>
-				<label>Search for an open playlist or a user</label>
 				<input type="text" value={query} onChange={onChange} />
 				<button>Search</button>
 			</form>
