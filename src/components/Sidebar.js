@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import {
 	IonContent,
 	IonToolbar,
@@ -8,13 +8,15 @@ import {
 	IonCardContent,
 	IonCardTitle,
 	IonCardHeader,
-	IonIcon
+	IonIcon,
+	IonAvatar
 } from '@ionic/react';
 import homeIcon from '../assets/images/home-outline.svg';
 import searchIcon from '../assets/images/search-outline.svg';
 import libraryIcon from '../assets/images/library-outline.svg';
 import aboutIcon from '../assets/images/bug-outline.svg';
 import { Link } from 'react-router-dom';
+import logo from '../assets/images/logo2.png';
 import '../assets/stylesheets/Sidebar.css';
 
 class Sidebar extends Component {
@@ -23,13 +25,15 @@ class Sidebar extends Component {
 	}
 	render() {
 		return (
-			<IonContent>
-				<IonCardHeader>
-					<IonToolbar>
-						<IonTitle>Start Menu</IonTitle>
-					</IonToolbar>
+			<Fragment>
+				<IonCardHeader className="side-header">
+					<div className="profile-button">
+						<IonAvatar className="profile-photo">
+							<img src={logo} />
+						</IonAvatar>
+					</div>
 				</IonCardHeader>
-				<IonList>
+				<IonList className="side-list">
 					<Link className="nav-link" to="/discover">
 						<IonCard button="true" className="nav-card">
 							<div className="cardContent">
@@ -63,7 +67,7 @@ class Sidebar extends Component {
 						</IonCard>
 					</Link>
 				</IonList>
-			</IonContent>
+			</Fragment>
 		);
 	}
 }

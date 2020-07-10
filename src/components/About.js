@@ -1,11 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Fragment } from 'react';
 
-const About = () => {
-	useEffect(() => {}, []);
+const About = (props) => {
 	return (
-		<div>
+		<Fragment>
 			<h1>About</h1>
-		</div>
+		</Fragment>
 	);
 };
 export default About;

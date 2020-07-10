@@ -1,37 +1,57 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
+import { IonAvatar, IonActionSheet } from '@ionic/react';
 import { connect } from 'react-redux';
 import { logoutUser, setMyTopTracks } from '../actions';
 import default_avatar from '../assets/images/default_avatar.jpg';
+import '../assets/stylesheets/Header.css';
 
 const Header = (props) => {
-	useEffect(
-		() => {
-			console.log(props.topTracks);
-		},
-		[ props.topTracks ]
-	);
+	const [ showActionSheet, setShowActionSheet ] = useState(false);
+
+	const onProfileClick = () => {
+		setShowActionSheet(true);
+	};
+
 	const onLogoutClick = () => {
+		console.log('logout clicked');
+		props.history.push('/');
 		props.logoutUser();
 		props.setMyTopTracks([]);
 	};
 	return (
-		<div>
-			<h4>Signed in as {props.user.display_name}</h4>
-			<img
-				src={props.user.images.length > 0 ? props.user.images[0].url : default_avatar}
-				style={{ height: '40px', width: '40px' }}
+		<Fragment>
+			<IonAvatar className="profile-pic" onClick={onProfileClick}>
+				<img src={props.user.images.length > 0 ? props.user.images[0].url : default_avatar} />
+			</IonAvatar>
+			<IonActionSheet
+				isOpen={showActionSheet}
+				onDidDismiss={() => setShowActionSheet(false)}
+				cssClass="my-custom-class"
+				buttons={[
+					{
+						text: 'Open Profile in Spotify',
+						role: 'destructive',
+						handler: () => {
+							console.log('Open Profile clicked');
+						}
+					},
+					{
+						text: 'Logout',
+						role: 'destructive',
+						handler: () => {
+							onLogoutClick();
+						}
+					},
+					{
+						text: 'Cancel',
+						role: 'cancel',
+						handler: () => {
+							console.log('Cancel clicked');
+						}
+					}
+				]}
 			/>
-			<button onClick={onLogoutClick}>Logout</button>
-			<img
-				src={
-					props.topTracks.length > 0 ? (
-						props.topTracks.items.images[0].url
-					) : (
-						'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRfAVBMxcqigV9t3Dae3WF1n7DJtkw60fkB9zvarNuo0GpKPcl6&usqp=CAU'
-					)
-				}
-			/>
-		</div>
+		</Fragment>
 	);
 };
 

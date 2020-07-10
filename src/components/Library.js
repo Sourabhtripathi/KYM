@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setMyPlaylists, addToOpenPlaylists, removeFromOpenPlaylists, togglePlaylist } from '../actions';
 import { addOpenPlaylist, removeOpenPlaylist, onPlaylistClick } from '../helpers';
-import { IonContent } from '@ionic/react';
 
 const Library = (props) => {
 	const onAddClick = async (pid, pname, uid, uname, images, i) => {
@@ -70,7 +69,7 @@ const Library = (props) => {
 	};
 
 	return (
-		<IonContent>
+		<Fragment>
 			<h1>My Playlists</h1>
 			<ul>
 				{props.myPlaylists.map((playlist, index) => {
@@ -89,7 +88,7 @@ const Library = (props) => {
 					);
 				})}
 			</ul>
-		</IonContent>
+		</Fragment>
 	);
 };
 

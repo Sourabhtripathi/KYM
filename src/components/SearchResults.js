@@ -20,6 +20,7 @@ const SearchResults = ({ query, openPlaylists, registeredUsers }) => {
 			setPlaylistContent(result);
 			keys = [ 'name' ];
 			result = search(registeredUsers, keys, query, options);
+			console.log(result);
 			setUserContent(result);
 		},
 		[ query ]
@@ -77,9 +78,10 @@ const SearchResults = ({ query, openPlaylists, registeredUsers }) => {
 										</span>
 									</header>
 									<img
-										src={user.images.length > 0 ? user.images[0].url : default_avatar}
+										src={user.images.length > 0 ? `${user.images[0].url}` : default_avatar}
 										style={{ height: '100px', width: '100px' }}
 									/>
+									{/* <img src="https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=820644964760282&height=300&width=300&ext=1592900055&hash=AeRrtPwqxlPYLpEA" /> */}
 								</div>
 							</li>
 						);

@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import SearchResults from './SearchResults';
-import { IonContent } from '@ionic/react';
 const Search = () => {
 	const [ query, setQuery ] = useState('');
 
@@ -13,13 +12,13 @@ const Search = () => {
 	};
 
 	return (
-		<IonContent>
+		<Fragment>
 			<form onSubmit={onSubmit}>
 				<input type="text" value={query} onChange={onChange} />
 				<button>Search</button>
 			</form>
 			<SearchResults query={query} />
-		</IonContent>
+		</Fragment>
 	);
 };
 export default Search;

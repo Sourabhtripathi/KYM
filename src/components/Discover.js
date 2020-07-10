@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { addRating, onPlaylistClick, onUserClick } from '../helpers';
 import { addToRatedBy } from '../actions';
-import { IonContent } from '@ionic/react';
 
 const Discover = (props) => {
 	const [ type, setType ] = useState('playlists');
@@ -90,8 +89,9 @@ const Discover = (props) => {
 			);
 		});
 	};
+	console.log('returning discover');
 	return (
-		<IonContent>
+		<Fragment>
 			<h1>Discover</h1>
 			<div>
 				<button disabled={type === 'playlists' ? true : false} onClick={() => onTabSwitch('playlists')}>
@@ -103,7 +103,7 @@ const Discover = (props) => {
 			</div>
 			<h3>Top {type.charAt(0).toUpperCase() + type.slice(1)}</h3>
 			<ul>{type === 'playlists' ? renderOpenPlaylists() : renderSimilarUsers()}</ul>
-		</IonContent>
+		</Fragment>
 	);
 };
 
