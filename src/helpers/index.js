@@ -48,6 +48,7 @@ export const removeStorage = async (key) => {
 };
 
 // Auth Configuration
+
 export const setAccessToken = (token) => {
 	spotifyApi.setAccessToken(token);
 };
@@ -78,13 +79,14 @@ export const getParams = (url) => {
 	return JSON.parse(Object.keys(data)[0]);
 };
 
-export const isValid = async () => {
+export const isValid = () => {
 	const d = new Date();
-
-	return getStorage('token_expire_time').then((data) => {
-		if (d.getTime() <= parseInt(data)) return true;
-		return false;
-	});
+	if (d.getTime() <= parseInt(localStorage.token_expire_time)) return true;
+	return false;
+	// return getStorage('token_expire_time').then((data) => {
+	// if (d.getTime() <= parseInt(data)) return true;
+	// return false;
+	// });
 };
 
 export const calculateTimeLeft = async () => {
@@ -102,24 +104,29 @@ export const calculateTimeLeft = async () => {
 	});
 };
 
-export const updateTokens = async (params) => {
+export const updateTokens = (params) => {
 	let d = new Date();
-	d.setSeconds(d.getSeconds() + 3600);
+	d.setSeconds(d.getSeconds() + 5);
 	// d.setSeconds(d.getSeconds() + 3600);
 	if (!params.refresh_token) {
 		// refreshed token-- just change access token and time
-		await setStorage('access_token', params.access_token);
-		await setStorage('token_expire_time', d.getTime());
-		window.close();
+		localStorage.setItem('access_token', params.access_token);
+		localStorage.setItem('token_expire_time', d.getTime());
+
+		// setStorage('access_token', params.access_token);
+		// setStorage('token_expire_time', d.getTime());
 		// closeBrowser();
 	} else {
-		await setStorage('access_token', params.access_token);
-		await setStorage('refresh_token', params.refresh_token);
-		await setStorage('token_expire_time', d.getTime());
+		localStorage.setItem('access_token', params.access_token);
+		localStorage.setItem('refresh_token', params.refresh_token);
+		localStorage.setItem('token_expire_time', d.getTime());
+
+		// setStorage('refresh_token', params.refresh_token);
+		// setStorage('token_expire_time', d.getTime());
 	}
-	return getStorage('access_token').then((data) => {
-		return data;
-	});
+	// return getStorage('access_token').then((data) => {
+	// 	return data;
+	// });
 };
 
 // Fetch content from spotify api

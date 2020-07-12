@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Route } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import BottomNav from './components/BottomNav';
+import PrivateRoute from './Routes/PrivateRoute';
 import {
 	loginUser,
 	setUserNotLoading,
