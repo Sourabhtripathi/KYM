@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Route } from 'react-router-dom';
+import axios from 'axios';
 import Sidebar from './components/Sidebar';
 import BottomNav from './components/BottomNav';
-import PrivateRoute from './Routes/PrivateRoute';
 import {
 	loginUser,
 	setUserNotLoading,
@@ -11,6 +11,7 @@ import {
 	setOpenPlaylists,
 	setRegisteredUsers,
 	setDevice,
+	logoutUser,
 	setUserLoading
 } from './actions';
 import { connect } from 'react-redux';
@@ -34,11 +35,11 @@ import {
 	getRegisteredUsers,
 	getStorage,
 	getDeviceInfo
-} from './helpers/index.js';
+} from './helpers';
 import './assets/stylesheets/App.css';
 import { IonApp, IonRouterOutlet, IonGrid, IonRow, IonCol, IonContent } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { serverUrl } from './variables';
+import { serverUrl, clientUrl } from './variables';
 
 // importing bootstrap
 // import 'bootstrap/dist/css/bootstrap.min.css';
@@ -61,34 +62,19 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
-import { Plugins, AppState, registerWebPlugin } from '@capacitor/core';
-import { OAuth2Client } from '@byteowls/capacitor-oauth2';
+import { Plugins } from '@capacitor/core';
+
+const refresh = () => {
+	let d = new Date();
+	setTimeout(async () => {
+		const res = await axios.get(`${serverUrl}/refresh_token?refresh_token=${localStorage.refresh_token}`);
+		console.log(res);
+		updateTokens(res.data);
+		refresh();
+	}, parseInt(localStorage.token_expire_time - d.getTime()));
+};
 
 const App = (props) => {
-	const [ myself, setMyself ] = useState(false);
-	const [ token, setToken ] = useState(null);
-	const [ time, setTime ] = useState(0);
-	const [ params, setParams ] = useState(null);
-
-	registerWebPlugin(OAuth2Client);
-
-	Plugins.App.addListener('appUrlOpen', (data) => {
-		props.setUserLoading();
-		const hash = data.url.split('#')[1];
-		console.log('checking for native params');
-		const par = getParams('#' + hash);
-		console.log('setting native params');
-		setParams(par);
-	});
-
-	Plugins.App.addListener('appStateChange', (state) => {
-		console.log(JSON.stringify(state));
-	});
-
-	Plugins.Browser.addListener('browserPageLoaded', (data) => {
-		console.log('Data - browserPageLoaded: ' + JSON.stringify(data));
-	});
-
 	useEffect(() => {
 		console.log('getting device info');
 		getDeviceInfo().then((device) => {
@@ -96,6 +82,44 @@ const App = (props) => {
 		});
 	}, []);
 
+	useEffect(
+		() => {
+			if (props.auth.device === 'web') {
+				console.log('on web');
+				if (window.location.hash) {
+					const params = getParams(window.location.hash);
+					updateTokens(params);
+					refresh();
+					setAccessToken(params.access_token);
+					setMe().then((data) => {
+						console.log('setting me');
+						props.loginUser(data);
+						props.setUserNotLoading();
+					});
+				} else {
+					if (localStorage.access_token) {
+						if (isValid()) {
+							refresh();
+							setAccessToken(localStorage.access_token);
+							setMe().then((data) => {
+								console.log('setting me');
+								props.loginUser(data);
+								props.setUserNotLoading();
+							});
+						} else {
+							refresh();
+							setAccessToken(localStorage.access_token);
+						}
+					} else {
+						props.setUserNotLoading();
+					}
+				}
+			} else if (props.auth.device === 'android' || props.auth.device === 'ios') {
+				console.log('on ' + props.auth.device);
+			}
+		},
+		[ props.auth.device ]
+	);
 	useEffect(
 		() => {
 			console.log('checking is authenticated');
@@ -129,83 +153,6 @@ const App = (props) => {
 			}
 		},
 		[ props.auth.isAuthenticated ]
-	);
-
-	useEffect(
-		() => {
-			setTimeout(() => {
-				setTime(time + 1);
-			}, 1000);
-
-			if (props.auth.device !== null) {
-				let paramsChecked = false;
-				console.log('checking for web params');
-				if (props.auth.device === 'web') {
-					console.log('setting web params');
-					if (window.location.hash) {
-						setParams(getParams(window.location.hash));
-						if (params) {
-							paramsChecked = true;
-						}
-					} else {
-						paramsChecked = true;
-					}
-				} else {
-					paramsChecked = true;
-				}
-
-				if (paramsChecked) {
-					if (isEmpty(params)) {
-						console.log('empty params');
-						console.log('checking for acc token in storage');
-						getStorage('access_token').then((foundToken) => {
-							if (foundToken) {
-								console.log('token found : ' + JSON.stringify(foundToken));
-								isValid().then((isvalid) => {
-									if (isvalid) {
-										console.log('is valid');
-										setToken(foundToken);
-									} else {
-										console.log('is not valid');
-										// refresh the token
-										console.log('getting refresh token');
-										getStorage('refresh_token').then((refresh_token) => {
-											console.log('refresh token found. Now getting a new token');
-											window.open(`${serverUrl}/refresh_token?refresh_token=${refresh_token}`);
-											// window.open();
-										});
-									}
-								});
-							} else {
-								console.log('token not found');
-								props.setUserNotLoading();
-							}
-						});
-					} else {
-						console.log('not empty params');
-						updateTokens(params).then((data) => {
-							setToken(data);
-						});
-					}
-				}
-			}
-		},
-		[ time ]
-	);
-
-	useEffect(
-		() => {
-			if (token) {
-				setAccessToken(token);
-				setMe().then((data) => {
-					console.log('setting me');
-					props.loginUser(data);
-					props.setUserNotLoading();
-				});
-				setMyself(true);
-			}
-		},
-		[ myself, token ]
 	);
 
 	console.log('app return');
@@ -257,18 +204,20 @@ const App = (props) => {
 		else
 			return (
 				<IonApp>
-					<IonReactRouter>
+					<Landing />
+					{/* <IonReactRouter>
 						<IonRouterOutlet>
 							<Route path="/" component={Landing} />
 						</IonRouterOutlet>
-					</IonReactRouter>
+					</IonReactRouter> */}
 				</IonApp>
 			);
 	}
 };
 const mapStateToProps = (state) => ({
 	auth: state.auth,
-	user: state.user
+	user: state.user,
+	topTracks: state.user.myTopTracks
 });
 export default connect(mapStateToProps, {
 	loginUser,
@@ -278,5 +227,6 @@ export default connect(mapStateToProps, {
 	setMyPlaylists,
 	setOpenPlaylists,
 	setRegisteredUsers,
-	setDevice
+	setDevice,
+	logoutUser
 })(App);
