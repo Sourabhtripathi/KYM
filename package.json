@@ -3,12 +3,10 @@
 	"version": "0.1.0",
 	"private": true,
 	"dependencies": {
-		"@byteowls/capacitor-oauth2": "2.0.0",
 		"@capacitor/android": "^2.1.0",
 		"@capacitor/cli": "^2.1.0",
 		"@capacitor/core": "^2.1.0",
 		"@ionic-native/core": "^5.26.0",
-		"@ionic-native/spotify-auth": "^5.26.0",
 		"@ionic/react": "^5.1.1",
 		"@ionic/react-router": "^5.1.1",
 		"@testing-library/jest-dom": "^4.2.4",
@@ -16,7 +14,6 @@
 		"@testing-library/user-event": "^7.2.1",
 		"axios": "^0.19.2",
 		"classnames": "^2.2.6",
-		"cordova-spotify-oauth": "^0.1.13",
 		"emotion": "^10.0.27",
 		"es6-promise-plugin": "^4.2.2",
 		"fuzzy-search": "^3.2.1",
@@ -28,13 +25,9 @@
 		"react-router": "^5.2.0",
 		"react-router-dom": "^5.1.2",
 		"react-scripts": "3.4.1",
-		"react-spotify-auth": "^0.4.5",
-		"react-use-auth": "^0.7.5",
 		"redux": "^4.0.5",
 		"redux-thunk": "^2.3.0",
-		"spotify-web-api-js": "^1.4.0",
-		"spotify-web-sdk": "^0.6.1",
-		"use-force-update": "^1.0.7"
+		"spotify-web-api-js": "^1.4.0"
 	},
 	"scripts": {
 		"start": "react-scripts start",
