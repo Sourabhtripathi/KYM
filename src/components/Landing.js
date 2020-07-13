@@ -3,8 +3,16 @@ import { connect } from 'react-redux';
 import { serverUrl } from '../variables';
 
 const Landing = (props) => {
+	const onLogin = () => {
+		window.open(`${serverUrl}/login`);
+	};
+
 	const renderLoginButton = () => {
-		return <a href={`${serverUrl}/login`}>Login with Spotify</a>;
+		return (
+			<div>
+				<a href={`${serverUrl}/login`}>Login with Spotify</a>
+			</div>
+		);
 	};
 
 	return (
