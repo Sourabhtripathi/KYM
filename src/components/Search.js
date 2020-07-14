@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, Fragment } from 'react';
 import SearchResults from './SearchResults';
 const Search = () => {
 	const [ query, setQuery ] = useState('');

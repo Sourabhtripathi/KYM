@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, Fragment } from 'react';
 import { IonAvatar, IonActionSheet } from '@ionic/react';
 import { connect } from 'react-redux';
 import { logoutUser, setMyTopTracks } from '../actions';
@@ -20,7 +20,7 @@ const Header = (props) => {
 	return (
 		<Fragment>
 			<IonAvatar className="profile-pic" onClick={onProfileClick}>
-				<img src={props.user.images.length > 0 ? props.user.images[0].url : default_avatar} />
+				<img alt="profile" src={props.user.images.length > 0 ? props.user.images[0].url : default_avatar} />
 			</IonAvatar>
 			<IonActionSheet
 				isOpen={showActionSheet}

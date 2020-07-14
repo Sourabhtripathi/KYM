@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setMyPlaylists, addToOpenPlaylists, removeFromOpenPlaylists, togglePlaylist } from '../actions';
 import { addOpenPlaylist, removeOpenPlaylist, onPlaylistClick } from '../helpers';
@@ -81,7 +80,11 @@ const Library = (props) => {
 										{playlist.name}{' '}
 									</span>
 								</header>
-								<img src={playlist.images[0].url} style={{ height: '100px', width: '100px' }} />
+								<img
+									alt="playlist"
+									src={playlist.images[0].url}
+									style={{ height: '100px', width: '100px' }}
+								/>
 								{playlist.owner.id === props.user.id ? renderButton(index) : null}
 							</div>
 						</li>

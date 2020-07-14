@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { IonContent, IonTabs, IonTabBar, IonTabButton, IonRouterOutlet } from '@ionic/react';
-import { Route, Redirect } from 'react-router-dom';
+import { IonTabs, IonTabBar, IonTabButton, IonRouterOutlet } from '@ionic/react';
+import { Redirect } from 'react-router-dom';
 
 class BottomNav extends Component {
 	render() {

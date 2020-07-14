@@ -41,7 +41,7 @@ import {
 import './assets/stylesheets/App.css';
 import { IonApp, IonRouterOutlet, IonGrid, IonRow, IonCol, IonContent } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { serverUrl, clientUrl } from './variables';
+import { serverUrl } from './variables';
 
 // importing bootstrap
 // import 'bootstrap/dist/css/bootstrap.min.css';
@@ -65,7 +65,6 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 import { Plugins } from '@capacitor/core';
-import { registerWebPlugin } from '@capacitor/core';
 
 const refresh = () => {
 	let d = new Date();
@@ -232,6 +231,7 @@ const App = (props) => {
 						});
 						props.setMyPlaylists(data);
 						props.setOpenPlaylists(res.data);
+						return;
 					});
 				});
 				getMyTopTracks(props.auth.user.id).then((data) => {

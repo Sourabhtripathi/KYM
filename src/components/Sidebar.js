@@ -1,16 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import {
-	IonContent,
-	IonToolbar,
-	IonTitle,
-	IonList,
-	IonCard,
-	IonCardContent,
-	IonCardTitle,
-	IonCardHeader,
-	IonIcon,
-	IonAvatar
-} from '@ionic/react';
+import { IonList, IonCard, IonCardContent, IonCardHeader, IonIcon, IonAvatar } from '@ionic/react';
 import homeIcon from '../assets/images/home-outline.svg';
 import searchIcon from '../assets/images/search-outline.svg';
 import libraryIcon from '../assets/images/library-outline.svg';
@@ -29,7 +18,7 @@ class Sidebar extends Component {
 				<IonCardHeader className="side-header">
 					<div className="profile-button">
 						<IonAvatar className="profile-photo">
-							<img src={logo} />
+							<img alt="profile" src={logo} />
 						</IonAvatar>
 					</div>
 				</IonCardHeader>

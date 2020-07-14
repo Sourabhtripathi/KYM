@@ -46,7 +46,11 @@ const SearchResults = ({ query, openPlaylists, registeredUsers }) => {
 											{playlist.playlistName}
 										</span>
 									</header>
-									<img src={playlist.images[0].url} style={{ height: '100px', width: '100px' }} />
+									<img
+										alt="playlist"
+										src={playlist.images[0].url}
+										style={{ height: '100px', width: '100px' }}
+									/>
 								</div>
 							</li>
 						);
@@ -78,6 +82,7 @@ const SearchResults = ({ query, openPlaylists, registeredUsers }) => {
 										</span>
 									</header>
 									<img
+										alt="user"
 										src={user.images.length > 0 ? `${user.images[0].url}` : default_avatar}
 										style={{ height: '100px', width: '100px' }}
 									/>

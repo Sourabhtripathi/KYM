@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { addRating, onPlaylistClick, onUserClick } from '../helpers';
@@ -63,7 +63,7 @@ const Discover = (props) => {
 							) : null}
 						</header>
 
-						<img src={playlist.images[0].url} style={{ height: '100px', width: '100px' }} />
+						<img alt="playlist" src={playlist.images[0].url} style={{ height: '100px', width: '100px' }} />
 						<div>
 							<span>
 								<span className="user" onClick={() => onUserClick(playlist.userId)}>

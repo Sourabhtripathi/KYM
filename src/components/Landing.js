@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
-import { serverUrl, clientUrl, scopes } from '../variables';
+import { serverUrl } from '../variables';
 
 const Landing = (props) => {
 	const onLogin = () => {};
