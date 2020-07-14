@@ -66,7 +66,6 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 import { Plugins } from '@capacitor/core';
 import { registerWebPlugin } from '@capacitor/core';
-import { OAuth2Client } from '@byteowls/capacitor-oauth2';
 
 const refresh = () => {
 	let d = new Date();
@@ -169,7 +168,6 @@ const App = (props) => {
 				}
 			} else if (props.auth.device === 'android' || props.auth.device === 'ios') {
 				console.log('Register custom capacitor plugins');
-				registerWebPlugin(OAuth2Client);
 				console.log('on ' + props.auth.device);
 				if (isEmpty(params)) {
 					console.log('empty params');

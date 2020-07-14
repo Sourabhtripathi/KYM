@@ -3,7 +3,6 @@
 	"version": "0.1.0",
 	"private": true,
 	"dependencies": {
-		"@byteowls/capacitor-oauth2": "2.0.0",
 		"@capacitor/android": "^2.1.0",
 		"@capacitor/cli": "^2.1.0",
 		"@capacitor/core": "^2.1.0",
@@ -26,10 +25,8 @@
 		"react-router": "^5.2.0",
 		"react-router-dom": "^5.1.2",
 		"react-scripts": "3.4.1",
-		"react-spotify-login": "^0.9.1",
 		"redux": "^4.0.5",
 		"redux-thunk": "^2.3.0",
-		"request": "^2.88.2",
 		"spotify-web-api-js": "^1.4.0"
 	},
 	"scripts": {
@@ -42,8 +39,16 @@
 		"extends": "react-app"
 	},
 	"browserslist": {
-		"production": [ ">0.2%", "not dead", "not op_mini all" ],
-		"development": [ "last 1 chrome version", "last 1 firefox version", "last 1 safari version" ]
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
 	},
 	"devDependencies": {
 		"ionic": "^5.4.16"
