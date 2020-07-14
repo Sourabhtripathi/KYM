@@ -89,18 +89,12 @@ export const isValid = () => {
 	// });
 };
 
-export const calculateTimeLeft = async () => {
-	let timeLeft = 10;
-	return getStorage('token_expire_time').then((token_expire_time) => {
-		return getStorage('access_token').then((access_token) => {
-			if (access_token) {
-				const difference = token_expire_time - new Date().getTime();
-				if (difference > 0) {
-					timeLeft = difference;
-				}
-			}
-			return timeLeft;
-		});
+export const isValid_a = () => {
+	const d = new Date();
+
+	return getStorage('token_expire_time').then((data) => {
+		if (d.getTime() <= parseInt(data)) return true;
+		return false;
 	});
 };
 
@@ -127,6 +121,32 @@ export const updateTokens = (params) => {
 	// return getStorage('access_token').then((data) => {
 	// 	return data;
 	// });
+};
+export const updateTokens_a = (params) => {
+	let d = new Date();
+	d.setSeconds(d.getSeconds() + 5);
+	console.log(d.getTime());
+	// d.setSeconds(d.getSeconds() + 3600);
+	if (!params.refresh_token) {
+		// refreshed token-- just change access token and time
+		return setStorage('access_token', params.access_token).then((data) => {
+			return setStorage('token_expire_time', JSON.stringify(d.getTime())).then((tet) => {
+				let val = 'successful';
+				return val;
+			});
+		});
+	} else {
+		return setStorage('access_token', params.access_token).then((data) => {
+			return setStorage('token_expire_time', JSON.stringify(d.getTime())).then((tet) => {
+				return setStorage('refresh_token', params.refresh_token).then((d1) => {
+					return getStorage('token_expire_time').then((time) => {
+						let val = 'successful';
+						return val;
+					});
+				});
+			});
+		});
+	}
 };
 
 // Fetch content from spotify api

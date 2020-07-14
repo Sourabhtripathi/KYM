@@ -94,9 +94,16 @@ export const loginUser = (id) => (dispatch) => {
 };
 
 // Log user out
-export const logoutUser = () => async (dispatch) => {
-	await removeStorage('access_token');
-	await removeStorage('refresh_token');
-	await removeStorage('token_expire_time');
+export const logoutUser = (device) => async (dispatch) => {
+	if (device === 'web') {
+		localStorage.removeItem('access_token');
+		localStorage.removeItem('refresh_token');
+		localStorage.removeItem('token_expire_time');
+	} else if (device === 'android' || device === 'ios') {
+		removeStorage('access_token');
+		removeStorage('refresh_token');
+		removeStorage('token_expire_time');
+	}
+
 	dispatch({ type: SET_CURRENT_USER, payload: null });
 };

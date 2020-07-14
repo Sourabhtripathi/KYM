@@ -12,7 +12,7 @@ dependencies {
     implementation project(':byteowls-capacitor-oauth2')
 
 }
-apply from: "../../node_modules/cordova-spotify-oauth/src/android/build.gradle"
+
 
 if (hasProperty('postBuildExtras')) {
   postBuildExtras()

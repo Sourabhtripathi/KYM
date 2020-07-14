@@ -14,9 +14,8 @@ const Header = (props) => {
 
 	const onLogoutClick = () => {
 		console.log('logout clicked');
-		props.history.push('/');
-		props.logoutUser();
-		props.setMyTopTracks([]);
+		props.logoutUser(props.auth.device);
+		window.location.reload();
 	};
 	return (
 		<Fragment>
@@ -58,6 +57,7 @@ const Header = (props) => {
 const mapStateTopProps = (state) => {
 	return {
 		user: state.auth.user,
+		auth: state.auth,
 		topTracks: state.user.myTopTracks
 	};
 };

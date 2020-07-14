@@ -27,7 +27,9 @@ import {
 	setMe,
 	getParams,
 	isValid,
+	isValid_a,
 	updateTokens,
+	updateTokens_a,
 	getMyTopTracks,
 	getUserPlaylists,
 	getOpenPlaylists,
@@ -63,6 +65,8 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 import { Plugins } from '@capacitor/core';
+import { registerWebPlugin } from '@capacitor/core';
+import { OAuth2Client } from '@byteowls/capacitor-oauth2';
 
 const refresh = () => {
 	let d = new Date();
@@ -74,7 +78,51 @@ const refresh = () => {
 	}, parseInt(localStorage.token_expire_time - d.getTime()));
 };
 
+const refresh_a = (refresh_token) => {
+	let d = new Date();
+
+	getStorage('token_expire_time').then((time) => {
+		setTimeout(async () => {
+			const res = await axios.get(`${serverUrl}/refresh_token?refresh_token=${refresh_token}`);
+			console.log(res);
+			updateTokens_a(res.data);
+			refresh_a(refresh_token);
+		}, parseInt(time) - parseInt(d.getTime()));
+	});
+};
+
 const App = (props) => {
+	const [ params, setParams ] = useState();
+
+	Plugins.App.addListener('appUrlOpen', (data) => {
+		props.setUserLoading();
+		console.log(JSON.stringify(data));
+		const hash = data.url.split('#')[1];
+		console.log('checking for native params');
+		const pars = getParams('#' + hash);
+		console.log('setting native params');
+		setParams(pars);
+		console.log('params found');
+		console.log('updating tokens');
+		updateTokens_a(pars).then((data) => {
+			if (data === 'successful') {
+				console.log('getting refresh token');
+				getStorage('refresh_token').then((refresh_token) => {
+					console.log('refresh token found');
+					refresh_a(refresh_token);
+					getStorage('access_token').then((access_token) => {
+						console.log(access_token);
+						setAccessToken(access_token);
+						setMe().then((data) => {
+							console.log('setting me');
+							props.loginUser(data);
+							props.setUserNotLoading();
+						});
+					});
+				});
+			}
+		});
+	});
 	useEffect(() => {
 		console.log('getting device info');
 		getDeviceInfo().then((device) => {
@@ -87,10 +135,10 @@ const App = (props) => {
 			if (props.auth.device === 'web') {
 				console.log('on web');
 				if (window.location.hash) {
-					const params = getParams(window.location.hash);
-					updateTokens(params);
+					const pars = getParams(window.location.hash);
+					updateTokens(pars);
 					refresh();
-					setAccessToken(params.access_token);
+					setAccessToken(pars.access_token);
 					setMe().then((data) => {
 						console.log('setting me');
 						props.loginUser(data);
@@ -99,7 +147,6 @@ const App = (props) => {
 				} else {
 					if (localStorage.access_token) {
 						if (isValid()) {
-							refresh();
 							setAccessToken(localStorage.access_token);
 							setMe().then((data) => {
 								console.log('setting me');
@@ -107,15 +154,62 @@ const App = (props) => {
 								props.setUserNotLoading();
 							});
 						} else {
+							console.log('not valid');
 							refresh();
 							setAccessToken(localStorage.access_token);
+							setMe().then((data) => {
+								console.log('setting me');
+								props.loginUser(data);
+								props.setUserNotLoading();
+							});
 						}
 					} else {
 						props.setUserNotLoading();
 					}
 				}
 			} else if (props.auth.device === 'android' || props.auth.device === 'ios') {
+				console.log('Register custom capacitor plugins');
+				registerWebPlugin(OAuth2Client);
 				console.log('on ' + props.auth.device);
+				if (isEmpty(params)) {
+					console.log('empty params');
+					console.log('checking for acc token in storage');
+					getStorage('access_token').then((foundToken) => {
+						if (foundToken) {
+							console.log('token found');
+							isValid_a().then((isvalid) => {
+								if (isvalid) {
+									console.log('is valid');
+									setAccessToken(foundToken);
+									setMe().then((data) => {
+										console.log('setting me');
+										props.loginUser(data);
+										props.setUserNotLoading();
+									});
+								} else {
+									console.log('is not valid');
+									// refresh the token
+									console.log('getting refresh token');
+
+									getStorage('refresh_token').then((refresh_token) => {
+										refresh_a(refresh_token);
+										getStorage('access_token').then((access_token) => {
+											setAccessToken(access_token);
+											setMe().then((data) => {
+												console.log('setting me');
+												props.loginUser(data);
+												props.setUserNotLoading();
+											});
+										});
+									});
+								}
+							});
+						} else {
+							console.log('token not found');
+							props.setUserNotLoading();
+						}
+					});
+				}
 			}
 		},
 		[ props.auth.device ]
@@ -123,7 +217,7 @@ const App = (props) => {
 	useEffect(
 		() => {
 			console.log('checking is authenticated');
-			if (props.auth.device && props.auth.isAuthenticated) {
+			if (props.auth.isAuthenticated) {
 				console.log('is authenticated');
 				getUserPlaylists(props.user.id).then((data) => {
 					getOpenPlaylists().then((res) => {
@@ -155,9 +249,7 @@ const App = (props) => {
 		[ props.auth.isAuthenticated ]
 	);
 
-	console.log('app return');
 	if (props.auth.isAuthenticated) {
-		console.log('authenticated');
 		return (
 			<IonApp>
 				<IonReactRouter>
@@ -194,7 +286,6 @@ const App = (props) => {
 			</IonApp>
 		);
 	} else {
-		console.log('not authenticated');
 		if (props.auth.loading)
 			return (
 				<IonApp>

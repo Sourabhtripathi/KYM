@@ -89,7 +89,6 @@ const Discover = (props) => {
 			);
 		});
 	};
-	console.log('returning discover');
 	return (
 		<Fragment>
 			<h1>Discover</h1>
