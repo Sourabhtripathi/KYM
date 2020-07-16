@@ -256,7 +256,7 @@ const App = (props) => {
 							<IonRow>
 								<IonCol size-xs="0" size-md="3" size-lg="2">
 									<IonContent className="sidebar">
-										<Sidebar />
+										<Route path="/" component={Sidebar} />
 									</IonContent>
 								</IonCol>
 								<IonCol size-xs="12" size-md="9" size-lg="10">

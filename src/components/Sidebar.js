@@ -1,17 +1,80 @@
 import React, { Component, Fragment } from 'react';
 import { IonList, IonCard, IonCardContent, IonCardHeader, IonIcon, IonAvatar } from '@ionic/react';
-import homeIcon from '../assets/images/home-outline.svg';
-import searchIcon from '../assets/images/search-outline.svg';
-import libraryIcon from '../assets/images/library-outline.svg';
-import aboutIcon from '../assets/images/bug-outline.svg';
 import { Link } from 'react-router-dom';
 import logo from '../assets/images/logo2.png';
 import '../assets/stylesheets/Sidebar.css';
+import { homeOutline } from 'ionicons/icons';
+import { searchOutline } from 'ionicons/icons';
+import { libraryOutline } from 'ionicons/icons';
+import { bugOutline } from 'ionicons/icons';
+
+const cardList = [
+	{
+		text: 'Home',
+		url: '/discover',
+		icon: homeOutline
+	},
+	{
+		text: 'Search',
+		url: '/search',
+		icon: searchOutline
+	},
+	{
+		text: 'Library',
+		url: '/library',
+		icon: libraryOutline
+	},
+	{
+		text: 'About',
+		url: '/about',
+		icon: bugOutline
+	}
+];
 
 class Sidebar extends Component {
+	state = {
+		activeCard: null
+	};
 	componentDidMount() {
-		console.log(this.props);
+		cardList.forEach((card, index) => {
+			if (card.url === this.props.location.pathname) {
+				this.setState({
+					activeCard: index
+				});
+			}
+		});
 	}
+
+	renderList = () => {
+		return (
+			<IonList className="side-list">
+				{cardList.map((card, index) => {
+					return (
+						<Link
+							className="nav-link"
+							to={card.url}
+							onClick={() => {
+								this.setState({
+									activeCard: index
+								});
+							}}
+						>
+							<IonCard
+								button="true"
+								className={`nav-card ${index === this.state.activeCard ? 'active' : null}`}
+							>
+								<div className="cardContent">
+									<IonIcon icon={card.icon} />
+									<IonCardContent>{card.text}</IonCardContent>
+								</div>
+							</IonCard>
+						</Link>
+					);
+				})}
+			</IonList>
+		);
+	};
+
 	render() {
 		return (
 			<Fragment>
@@ -22,40 +85,7 @@ class Sidebar extends Component {
 						</IonAvatar>
 					</div>
 				</IonCardHeader>
-				<IonList className="side-list">
-					<Link className="nav-link" to="/discover">
-						<IonCard button="true" className="nav-card">
-							<div className="cardContent">
-								<IonIcon icon={homeIcon} />
-								<IonCardContent>Home</IonCardContent>
-							</div>
-						</IonCard>
-					</Link>
-					<Link className="nav-link" to="/search">
-						<IonCard button="true" className="nav-card">
-							<div className="cardContent">
-								<IonIcon icon={searchIcon} />
-								<IonCardContent>Search</IonCardContent>
-							</div>
-						</IonCard>
-					</Link>
-					<Link className="nav-link" to="/library">
-						<IonCard button="true" className="nav-card">
-							<div className="cardContent">
-								<IonIcon icon={libraryIcon} />
-								<IonCardContent>Library</IonCardContent>
-							</div>
-						</IonCard>
-					</Link>
-					<Link className="nav-link" to="/about">
-						<IonCard button="true" className="nav-card">
-							<div className="cardContent">
-								<IonIcon icon={aboutIcon} />
-								<IonCardContent>About</IonCardContent>
-							</div>
-						</IonCard>
-					</Link>
-				</IonList>
+				{this.renderList()}
 			</Fragment>
 		);
 	}
