@@ -8,3 +8,19 @@
 .profile-pic:hover {
 	cursor: pointer;
 }
+
+.popover-list {
+	padding: 0;
+}
+
+.popover-item {
+	cursor: pointer;
+}
+
+.popover-item span {
+	padding: 0 20px;
+}
+
+.cancel {
+	margin-left: 30%;
+}

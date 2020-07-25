@@ -31,16 +31,17 @@
 	height: 50px;
 }
 
-.dc-list {
+.dc-content {
 	height: calc(100vh - 50px);
 	overflow-y: scroll;
+	padding: 2%;
 }
 
-.dc-list::-webkit-scrollbar {
+.dc-content::-webkit-scrollbar {
 	display: none !important;
 }
 
-.dc-list {
+.dc-content {
 	-ms-overflow-style: none;
 	scrollbar-width: none;
 }
@@ -55,7 +56,7 @@
 	.display-content {
 		height: calc(100vh - 50px);
 	}
-	.dc-list {
+	.dc-content {
 		height: calc(100vh - 100px);
 	}
 }

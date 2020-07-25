@@ -219,8 +219,10 @@ const App = (props) => {
 				getUserPlaylists(props.user.id).then((data) => {
 					getOpenPlaylists().then((res) => {
 						data.map((playlist) => {
-							if (found(res.data, playlist.id)) {
+							let retVal = found(res.data, playlist.id);
+							if (retVal) {
 								playlist.open = true;
+								playlist.rating = retVal;
 							} else {
 								playlist.open = false;
 							}
@@ -264,7 +266,7 @@ const App = (props) => {
 										<div className="dc-header">
 											<Route path="/" component={Header} />
 										</div>
-										<div className="dc-list">
+										<div className="dc-content">
 											<Route exact path="/discover" exact component={Discover} />
 											<Route exact path="/search" exact component={Search} />
 											<Route exact path="/library" exact component={Library} />

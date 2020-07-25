@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { IonTabs, IonTabBar, IonTabButton, IonRouterOutlet } from '@ionic/react';
 import { Redirect } from 'react-router-dom';
+import '../assets/stylesheets/BottomNav.css';
 
 class BottomNav extends Component {
 	render() {
 		return (
 			<IonTabs>
-				<IonRouterOutlet>
+				<IonRouterOutlet className="router-outlet">
 					<Redirect exact path="/" to="/discover" />
 				</IonRouterOutlet>
 				<IonTabBar slot="bottom">

@@ -217,10 +217,11 @@ export const found = (array, value) => {
 	let retVal;
 	for (const i in array) {
 		if (array[i].playlistId === value) {
-			retVal = true;
+			console.log(array[i]);
+			retVal = array[i].overallRating;
 			break;
 		} else {
-			retVal = false;
+			retVal = null;
 		}
 	}
 	return retVal;

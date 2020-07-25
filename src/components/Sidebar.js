@@ -3,10 +3,7 @@ import { IonList, IonCard, IonCardContent, IonCardHeader, IonIcon, IonAvatar } f
 import { Link } from 'react-router-dom';
 import logo from '../assets/images/logo2.png';
 import '../assets/stylesheets/Sidebar.css';
-import { homeOutline } from 'ionicons/icons';
-import { searchOutline } from 'ionicons/icons';
-import { libraryOutline } from 'ionicons/icons';
-import { bugOutline } from 'ionicons/icons';
+import { homeOutline, searchOutline, libraryOutline, bugOutline } from 'ionicons/icons';
 
 const cardList = [
 	{
@@ -33,7 +30,7 @@ const cardList = [
 
 class Sidebar extends Component {
 	state = {
-		activeCard: null
+		activeCard: 0
 	};
 	componentDidMount() {
 		cardList.forEach((card, index) => {

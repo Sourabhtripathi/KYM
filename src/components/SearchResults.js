@@ -5,7 +5,7 @@ import default_avatar from '../assets/images/default_avatar.jpg';
 import { onPlaylistClick, onUserClick } from '../helpers';
 import { IonContent } from '@ionic/react';
 
-const SearchResults = ({ query, openPlaylists, registeredUsers }) => {
+const SearchResults = ({ query, openPlaylists, registeredUsers, ...props }) => {
 	const [ playlistContent, setPlaylistContent ] = useState([]);
 	const [ userContent, setUserContent ] = useState([]);
 	useEffect(
@@ -38,22 +38,30 @@ const SearchResults = ({ query, openPlaylists, registeredUsers }) => {
 				<div>
 					<h1>Playlists</h1>
 					{playlistContent.map((playlist, index) => {
-						return (
-							<li key={index}>
-								<div>
-									<header>
-										<span className="playlist" onClick={() => onPlaylistClick(playlist.playlistId)}>
-											{playlist.playlistName}
-										</span>
-									</header>
-									<img
-										alt="playlist"
-										src={playlist.images[0].url}
-										style={{ height: '100px', width: '100px' }}
-									/>
-								</div>
-							</li>
-						);
+						if (playlist.userId !== props.auth.user.id) {
+							return (
+								<li key={index}>
+									<div>
+										<header>
+											<span
+												className="playlist"
+												onClick={() => onPlaylistClick(playlist.playlistId)}
+											>
+												{playlist.playlistName}
+											</span>
+										</header>
+										<img
+											alt="playlist"
+											src={playlist.images[0].url}
+											style={{ height: '100px', width: '100px' }}
+										/>
+										<div>Rating : {playlist.overallRating}</div>
+									</div>
+								</li>
+							);
+						} else {
+							return null;
+						}
 					})}
 				</div>
 			);
@@ -72,24 +80,26 @@ const SearchResults = ({ query, openPlaylists, registeredUsers }) => {
 				<div>
 					<h1>Users</h1>
 					{userContent.map((user, index) => {
-						console.log(user.images);
-						return (
-							<li key={index}>
-								<div>
-									<header>
-										<span className="playlist" onClick={() => onUserClick(user.userId)}>
-											{user.name}
-										</span>
-									</header>
-									<img
-										alt="user"
-										src={user.images.length > 0 ? `${user.images[0].url}` : default_avatar}
-										style={{ height: '100px', width: '100px' }}
-									/>
-									{/* <img src="https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=820644964760282&height=300&width=300&ext=1592900055&hash=AeRrtPwqxlPYLpEA" /> */}
-								</div>
-							</li>
-						);
+						if (user.spotifyId !== props.auth.user.id) {
+							return (
+								<li key={index}>
+									<div>
+										<header>
+											<span className="playlist" onClick={() => onUserClick(user.userId)}>
+												{user.name}
+											</span>
+										</header>
+										<img
+											alt="user"
+											src={user.images.length > 0 ? `${user.images[0].url}` : default_avatar}
+											style={{ height: '100px', width: '100px' }}
+										/>
+									</div>
+								</li>
+							);
+						} else {
+							return null;
+						}
 					})}
 				</div>
 			);
@@ -115,7 +125,8 @@ const SearchResults = ({ query, openPlaylists, registeredUsers }) => {
 const mapStateToProps = (state) => {
 	return {
 		openPlaylists: state.user.openPlaylists,
-		registeredUsers: state.db.registeredUsers
+		registeredUsers: state.db.registeredUsers,
+		auth: state.auth
 	};
 };
 

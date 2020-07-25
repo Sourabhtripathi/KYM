@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { addRating, onPlaylistClick, onUserClick } from '../helpers';
 import { addToRatedBy } from '../actions';
+import '../assets/stylesheets/Discover.css';
 
 const Discover = (props) => {
 	const [ type, setType ] = useState('playlists');
@@ -48,35 +49,37 @@ const Discover = (props) => {
 
 	const renderOpenPlaylists = () => {
 		return props.user.openPlaylists.map((playlist, index) => {
-			return (
-				<li key={index}>
-					<div>
-						<header>
-							<span className="playlist" onClick={() => onPlaylistClick(playlist.playlistId)}>
-								{playlist.playlistName}{' '}
-							</span>
-							{playlist.userId === props.auth.user.id ? (
-								<span>
-									{' '}
-									<b>Your</b>{' '}
-								</span>
-							) : null}
-						</header>
-
-						<img alt="playlist" src={playlist.images[0].url} style={{ height: '100px', width: '100px' }} />
+			if (playlist.userId !== props.auth.user.id) {
+				return (
+					<li key={index}>
 						<div>
-							<span>
-								<span className="user" onClick={() => onUserClick(playlist.userId)}>
-									{playlist.userName}
-								</span>{' '}
-								::{' '}
-							</span>
-							<span>Rating : {playlist.overallRating}</span>
-							{renderRatingOption(playlist.playlistId, playlist.userId, playlist.ratedBy, index)}
+							<header>
+								<span className="playlist" onClick={() => onPlaylistClick(playlist.playlistId)}>
+									{playlist.playlistName}{' '}
+								</span>
+							</header>
+
+							<img
+								alt="playlist"
+								src={playlist.images[0].url}
+								style={{ height: '100px', width: '100px' }}
+							/>
+							<div>
+								<span>
+									<span className="user" onClick={() => onUserClick(playlist.userId)}>
+										{playlist.userName}
+									</span>{' '}
+									::{' '}
+								</span>
+								<span>Rating : {playlist.overallRating}</span>
+								{renderRatingOption(playlist.playlistId, playlist.userId, playlist.ratedBy, index)}
+							</div>
 						</div>
-					</div>
-				</li>
-			);
+					</li>
+				);
+			} else {
+				return null;
+			}
 		});
 	};
 
@@ -91,15 +94,7 @@ const Discover = (props) => {
 	};
 	return (
 		<Fragment>
-			<h1>Discover</h1>
-			<div>
-				<button disabled={type === 'playlists' ? true : false} onClick={() => onTabSwitch('playlists')}>
-					Playlists
-				</button>
-				<button disabled={type === 'users' ? true : false} onClick={() => onTabSwitch('users')}>
-					Similar Users
-				</button>
-			</div>
+			<header className="section-header">Discover</header>
 			<h3>Top {type.charAt(0).toUpperCase() + type.slice(1)}</h3>
 			<ul>{type === 'playlists' ? renderOpenPlaylists() : renderSimilarUsers()}</ul>
 		</Fragment>
