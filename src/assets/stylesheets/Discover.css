@@ -1,9 +1,1 @@
-.section-header {
-	font-size: 2em;
-}
 
-@media only screen and (max-width: 720px) {
-	.section-header {
-		font-size: 2em;
-	}
-}

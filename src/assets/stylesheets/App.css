@@ -3,22 +3,6 @@
 	padding: 0;
 }
 
-.playlist:hover {
-	cursor: pointer;
-}
-
-.playlist {
-	font-weight: 600;
-}
-
-.user:hover {
-	cursor: pointer;
-}
-
-.user {
-	font-weight: 600;
-}
-
 .sidebar {
 	height: 100vh;
 }

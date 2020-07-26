@@ -1,0 +1,32 @@
+.list {
+	padding: 10px;
+}
+
+.list-item {
+	margin: 3%;
+	/* max-width: 500px; */
+	margin-left: 0;
+}
+
+.item-avatar {
+	height: 100px;
+	width: 100px;
+}
+
+.playlist-name {
+	cursor: pointer;
+}
+
+.user-name {
+	cursor: pointer;
+}
+
+@media only screen and (max-width: 720px) {
+	.list {
+		padding: 5px;
+	}
+	.list-item {
+		margin: 3%;
+		margin-left: 0;
+	}
+}

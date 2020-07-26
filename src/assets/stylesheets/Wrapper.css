@@ -1,0 +1,16 @@
+.section-header {
+	font-size: 2em;
+}
+
+.content {
+	padding: 10px;
+}
+
+@media only screen and (max-width: 720px) {
+	.section-header {
+		font-size: 2em;
+	}
+	.content {
+		padding: 5px;
+	}
+}

@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { addRating, onPlaylistClick, onUserClick } from '../helpers';
 import { addToRatedBy } from '../actions';
 import '../assets/stylesheets/Discover.css';
+import Wrapper from './Wrapper';
+import CardList from './CardList';
 
 const Discover = (props) => {
 	const [ type, setType ] = useState('playlists');
@@ -83,20 +85,10 @@ const Discover = (props) => {
 		});
 	};
 
-	const renderSimilarUsers = () => {
-		return props.user.similarUsers.map((user, index) => {
-			return (
-				<li key={index}>
-					<Link to={`/`}>{user.name}</Link>
-				</li>
-			);
-		});
-	};
 	return (
 		<Fragment>
-			<header className="section-header">Discover</header>
 			<h3>Top {type.charAt(0).toUpperCase() + type.slice(1)}</h3>
-			<ul>{type === 'playlists' ? renderOpenPlaylists() : renderSimilarUsers()}</ul>
+			<CardList data={type === 'playlists' ? props.user.openPlaylists : null} />
 		</Fragment>
 	);
 };
@@ -107,4 +99,9 @@ const mapStateToProps = (state) => {
 		auth: state.auth
 	};
 };
-export default connect(mapStateToProps, { addToRatedBy })(Discover);
+
+const conf = {
+	title: 'Discover'
+};
+
+export default Wrapper(connect(mapStateToProps, { addToRatedBy })(Discover), conf);
