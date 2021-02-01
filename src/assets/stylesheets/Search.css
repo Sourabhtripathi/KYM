@@ -1,0 +1,28 @@
+.search-form {
+  text-align: left;
+}
+
+.search-bar {
+  background: url("../images/search-outline.svg") top left no-repeat;
+  background-position-x: 10px;
+  background-position-y: 2px;
+  background-size: 23px;
+  height: 33px;
+  width: 400px;
+  outline: none;
+  border-radius: 15px;
+  text-align: center;
+}
+
+.search-bar:focus {
+  border-color: blue;
+}
+
+@media only screen and (max-width: 720px) {
+  .search-form {
+    text-align: center;
+  }
+  .search-bar {
+    width: 300px;
+  }
+}

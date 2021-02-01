@@ -1,7 +1,7 @@
-// export const serverUrl = 'http://localhost:3005';
-// export const clientUrl = 'http://localhost:3000';
-export const clientUrl = 'https://knowyourmusic.netlify.app';
-export const serverUrl = 'https://kymserver.herokuapp.com';
+export const serverUrl = 'http://localhost:3005';
+export const clientUrl = 'http://localhost:3000';
+// export const clientUrl = 'https://knowyourmusic.netlify.app';
+// export const serverUrl = 'https://kymserver.herokuapp.com';
 export const scopes = [
 	'ugc-image-upload',
 	'user-read-playback-state',

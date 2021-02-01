@@ -1,0 +1,39 @@
+.grid-card {
+  margin: 10px;
+  height: 180px;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  text-align: center;
+}
+.upper-div {
+  height: 30px;
+}
+.card-div {
+  height: 130px;
+  border-radius: 5px;
+}
+
+.card-div img {
+  position: relative;
+  height: 100px;
+  width: 100px;
+  border-radius: 50%;
+  top: -20px;
+}
+
+.toggle-openplaylist-icon {
+  color: #ffffff;
+  float: right;
+  margin-right: 5px;
+  margin-top: 5px;
+  cursor: pointer;
+}
+
+.lower-div {
+  padding-top: 5px;
+  color: #39393b;
+  font-family: "Noto Sans", sans-serif;
+  text-align: center;
+  cursor: pointer;
+  display: inline-block;
+}

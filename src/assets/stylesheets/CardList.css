@@ -1,32 +1,82 @@
 .list {
-	padding: 10px;
+  padding: 10px;
+}
+
+.grid {
+  margin-left: 2vw;
+}
+
+.row {
+  margin-bottom: 15px;
 }
 
 .list-item {
-	margin: 3%;
-	/* max-width: 500px; */
-	margin-left: 0;
+  margin: 0 0 2vw 0;
+  width: 80%;
 }
 
 .item-avatar {
-	height: 100px;
-	width: 100px;
+  height: 100px;
+  width: 100px;
 }
 
 .playlist-name {
-	cursor: pointer;
+  cursor: pointer;
+  color: #2f3030;
+  font-size: larger;
+  font-weight: 800;
 }
 
-.user-name {
-	cursor: pointer;
+.username {
+  cursor: pointer;
+  font-size: small;
+  padding-left: 1vw;
+  color: #5c5d5e;
+}
+
+.rate-button {
+  width: 100px;
+  font-size: 17px;
+}
+
+.rate-modal .modal-wrapper {
+  height: 270px;
+}
+
+.rate-card {
+  height: 100%;
+  text-align: center;
+}
+
+.rating-heading {
+  padding: 20px;
+}
+
+.rating-button {
+  display: block;
+  width: 100px;
+  margin: 50px auto;
 }
 
 @media only screen and (max-width: 720px) {
-	.list {
-		padding: 5px;
-	}
-	.list-item {
-		margin: 3%;
-		margin-left: 0;
-	}
+  .list {
+    padding: 0;
+  }
+  .list-item {
+    margin: 3%;
+    margin-left: 0;
+    width: 100%;
+  }
+  .rate-button {
+    width: 100px;
+  }
+  .grid {
+    margin-left: 5vw;
+  }
+  .rate-modal .modal-wrapper {
+    height: 100%;
+  }
+  .rate-card {
+    padding: 25vh 20px;
+  }
 }
